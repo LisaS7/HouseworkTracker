@@ -3,7 +3,7 @@
 # Setup
 
 Create the database using the create.sql file:
-`psql -f create.sql`
+`psql -f DB/create.sql`
 
 Add a .env file in the root directory. This needs to contain the following data (replacing with the correct details):
 POSTGRES_USER=user
