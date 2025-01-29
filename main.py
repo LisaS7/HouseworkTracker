@@ -1,18 +1,22 @@
 from fastapi import FastAPI
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+from DB.session import engine
+from DB.base import Base
 from config import settings
 
-app = FastAPI()
 
-print(settings.DATABASE_URL)
-engine = create_engine(settings.DATABASE_URL)
+def create_tables():
+    Base.metadata.create_all(bind=engine)
 
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
+def start_application():
+    app = FastAPI(title=settings.PROJECT_NAME, version=settings.PROJECT_VERSION)
+    create_tables()
+    return app
+
+
+app = start_application()
 
 
 @app.get("/")
 def main():
-    print(engine)
-    print(SessionLocal)
     return {"message": "Hello, World!"}
