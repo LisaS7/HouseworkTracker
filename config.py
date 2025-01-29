@@ -1,4 +1,4 @@
-import os
+import os, sys
 from dotenv import load_dotenv
 
 from pathlib import Path
@@ -18,8 +18,12 @@ class Settings:
     )  # default postgres port is 5432
     POSTGRES_DB: str = os.getenv("POSTGRES_DB", "housework")
 
+    # DETERMINE HOST
     if os.getenv("IN_DOCKER") == True:
-        POSTGRES_SERVER: str = os.getenv("POSTGRES_SERVER")
+        if sys.platform.startswith("linux"):
+            os.getenv("LINUX_IP")
+        else:
+            POSTGRES_SERVER: str = os.getenv("POSTGRES_SERVER")
     else:
         POSTGRES_SERVER: str = "localhost"
 
