@@ -24,9 +24,9 @@ class Settings:
     POSTGRES_DB: str = os.getenv("POSTGRES_DB", "housework")
 
     # Determine Host
-    if os.getenv("IN_DOCKER") == True:
+    if os.getenv("IN_DOCKER") == "True":
         if sys.platform.startswith("linux"):
-            os.getenv("LINUX_IP")
+            POSTGRES_SERVER: str = os.getenv("LINUX_IP")
         else:
             POSTGRES_SERVER: str = os.getenv("POSTGRES_SERVER")
     else:
