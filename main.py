@@ -1,6 +1,5 @@
 from fastapi import FastAPI
-from DB.session import engine
-from DB.base import Base
+from DB.session import engine, Base
 from config import settings
 
 
