@@ -36,6 +36,7 @@ class Settings:
 
     # ---- MODELS -----
     MAX_TITLE_LENGTH: int = 255
+    MAX_TAG_LENGTH: int = 50
 
 
 settings = Settings()

@@ -5,7 +5,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.exc import IntegrityError
 
 
-from DB.Task import Task, Priority
+from DB.Task import Task, Priority, Tag
 from DB.User import User
 from DB.session import Base
 from config import settings
@@ -109,6 +109,23 @@ def test_invalid_date(test_user, db):
         ValueError, match="Date is invalid, you provided Banana of type <class 'str'>"
     ):
         task = Task(title="Test Date", user_id=test_user.id, due_date=due_date)
+
+
+def test_task_with_tags(test_user, db):
+    task = Task(title="Test Tags", user_id=test_user.id)
+    tag1 = Tag(name="Living Room")
+    tag2 = Tag(name="Kitchen")
+    task.tags = [tag1, tag2]
+
+    db.add(task)
+    db.commit()
+    db.refresh(task)
+
+    retrieved_task = db.query(Task).filter_by(title="Test Tags").first()
+
+    assert len(retrieved_task.tags) == 2
+    assert retrieved_task.tags[0].name == "Living Room"
+    assert retrieved_task.tags[1].name == "Kitchen"
 
 
 # ---------- USER ----------
