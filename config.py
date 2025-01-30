@@ -18,6 +18,8 @@ class Settings:
     )  # default postgres port is 5432
     POSTGRES_DB: str = os.getenv("POSTGRES_DB", "housework")
 
+    MAX_TITLE_LENGTH: int = 255
+
     # DETERMINE HOST
     if os.getenv("IN_DOCKER") == True:
         if sys.platform.startswith("linux"):
