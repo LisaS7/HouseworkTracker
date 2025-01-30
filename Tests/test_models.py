@@ -115,13 +115,39 @@ def test_invalid_date(test_user, db):
 
 
 def test_default_active(db):
-    pass
+    user = User(name="Michael Scott", email="michael@dundermifflin.com")
+    db.add(user)
+    db.commit()
+    db.refresh(user)
+    retrieved_user = db.query(User).filter_by(name="Michael Scott").first()
+
+    assert retrieved_user.active == True
 
 
 def test_unique_email(db):
-    pass
+    user1 = User(name="Michael", email="michael@dundermifflin.com")
+    user2 = User(name="Dwight", email="michael@dundermifflin.com")
+
+    db.add(user1)
+    db.add(user2)
+
+    with pytest.raises(IntegrityError):
+        db.commit()
 
 
 # ---------- RELATIONSHIP ----------
-def test_get_tasks_for_user(db):
-    pass
+
+
+def test_get_tasks_for_user(test_user, db):
+    task1 = Task(title="Test Task 1", user_id=test_user.id)
+    task2 = Task(title="Test Task 2", user_id=test_user.id)
+    db.add(task1)
+    db.add(task2)
+    db.commit()
+
+    tasks = db.query(Task).filter(Task.user_id == test_user.id).all()
+
+    assert len(tasks) == 2
+    assert tasks[0].title == "Test Task 1"
+    assert tasks[1].title == "Test Task 2"
+    assert all(task.user_id == test_user.id for task in tasks)
