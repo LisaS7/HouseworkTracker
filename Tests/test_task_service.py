@@ -1,0 +1,153 @@
+import pytest
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from DB.session import Base
+
+from models.Task import Task, Priority
+from models.User import User
+from services.Task import *
+
+from datetime import date
+
+TODAY = date.today()
+
+engine = create_engine("sqlite:///:memory:", echo=True)
+Session = sessionmaker(bind=engine)
+
+
+@pytest.fixture
+def create_tables():
+    Base.metadata.create_all(engine)
+    yield
+    Base.metadata.drop_all(engine)
+
+
+@pytest.fixture
+def db(create_tables):
+    test_session = Session()
+    yield test_session
+    test_session.close()
+
+
+@pytest.fixture
+def test_users(db):
+    """Dummy users for testing"""
+    user1 = User(name="Michael", email="michael@dundermifflin.com")
+    user2 = User(name="Dwight", email="dwight@dundermifflin.com")
+    db.add_all([user1, user2])
+    db.commit()
+    db.refresh(user1)
+    db.refresh(user2)
+    return [user1, user2]
+
+
+@pytest.fixture
+def test_tasks(test_users, db):
+    """Dummy tasks for testing"""
+    user1, user2 = test_users
+
+    tasks = [
+        Task(
+            title="Mop kitchen",
+            priority=Priority.HIGH,
+            due_date="2025-01-21",
+            user=user1,
+        ),
+        Task(title="Clean oven", due_date="2025-01-30", user=user1),
+        Task(title="Wash dishes", due_date=TODAY, user=user2),
+        Task(title="Feed the cat", due_date=date.today(), user=user2),
+        Task(
+            title="Grocery shopping", due_date="2025-04-30", user=user2, complete=True
+        ),
+    ]
+
+    db.add_all(tasks)
+    db.commit()
+
+    for task in tasks:
+        db.refresh(task)
+
+    return tasks
+
+
+def test_get_all_tasks(test_tasks, db):
+    tasks = get_all_tasks(db)
+    assert len(tasks) == 5
+    assert tasks[0].title == "Mop kitchen"
+
+
+def test_get_all_incomplete_tasks(test_tasks, db):
+    tasks = get_all_incomplete_tasks(db)
+    assert len(tasks) == 4
+    for task in tasks:
+        assert not task.complete
+
+
+def test_get_overdue_tasks(test_tasks, db):
+    tasks = get_all_overdue_tasks(db)
+    assert len(tasks) == 2
+    for task in tasks:
+        assert task.due_date < date.today()
+
+
+def test_get_today_tasks(test_tasks, db):
+    tasks = get_todays_tasks(db)
+    assert len(tasks) == 2
+    for task in tasks:
+        assert task.due_date == TODAY
+
+
+def test_get_tasks_by_user(test_tasks, db):
+    tasks = get_tasks_by_user(db, 1)
+    assert len(tasks) == 2
+    for task in tasks:
+        assert task.user_id == 1
+
+
+def test_get_task_by_id(test_tasks, db):
+    task = get_task_by_id(db, 3)
+    assert task.title == "Wash dishes"
+
+
+def test_task_not_found(test_tasks, db):
+    with pytest.raises(TaskNotFoundException, match="Task not found for id 23"):
+        task = get_task_by_id(db, 23)
+
+
+def test_create_task(test_users, db):
+    user = test_users[0]
+    task = Task(title="Buy cheese", due_date="2025-01-30", user=user)
+    created_task = create_task(db, task)
+    retrieved_task = db.query(Task).filter_by(title="Buy cheese").first()
+    assert retrieved_task == created_task
+
+
+def test_update_task(test_tasks, db):
+    update_task(db, 1, {"title": "Laundry"})
+    retrieved_task = db.query(Task).filter(Task.id == 1).first()
+    assert retrieved_task.title == "Laundry"
+    assert retrieved_task.due_date == date(2025, 1, 21)
+
+
+def test_delete_task(test_tasks, db):
+    delete_task(db, 2)
+    tasks = db.query(Task).all()
+    deleted_task = db.query(Task).filter(Task.id == 2).first()
+    assert len(tasks) == 4
+    assert not deleted_task
+
+
+def test_get_all_tags():
+    pass
+
+
+def test_get_tags_by_task():
+    pass
+
+
+def test_update_tag():
+    pass
+
+
+def test_delete_tag():
+    pass
