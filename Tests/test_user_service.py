@@ -29,8 +29,7 @@ def test_users(db):
     """Dummy users for testing"""
     user1 = User(name="Michael", email="michael@dundermifflin.com")
     user2 = User(name="Dwight", email="dwight@dundermifflin.com")
-    db.add(user1)
-    db.add(user2)
+    db.add_all([user1, user2])
     db.commit()
     db.refresh(user1)
     db.refresh(user2)

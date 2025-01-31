@@ -5,7 +5,8 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.exc import IntegrityError
 
 
-from models.Task import Task, Priority, Tag
+from models.Task import Task, Priority
+from models.Tag import Tag
 from models.User import User
 from DB.session import Base
 from config import settings
