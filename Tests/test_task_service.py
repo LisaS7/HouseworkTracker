@@ -7,6 +7,7 @@ from models.Task import Task, Priority
 from models.User import User
 from models.Tag import Tag
 from services.Task import *
+from config import settings
 
 from datetime import date
 
@@ -161,6 +162,13 @@ def test_get_tags_by_task(test_tasks, db):
     test_tasks[0].tags = tags
     retrieved_tags = get_tags_by_task(db, 1)
     assert retrieved_tags == tags
+
+
+def test_get_tasks_by_tag(test_tasks, test_tags, db):
+    test_tasks[0].tags = test_tags
+    test_tasks[1].tags = test_tags
+    retrieved_tasks = get_tasks_by_tag(db, test_tags[0])
+    assert retrieved_tasks == [test_tasks[0], test_tasks[1]]
 
 
 def test_get_no_tags(test_tasks, db):
