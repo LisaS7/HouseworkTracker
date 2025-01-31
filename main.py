@@ -7,16 +7,12 @@ from routes import users
 from seed import seed
 
 
-def start_application():
-    app = FastAPI(title=settings.PROJECT_NAME, version=settings.PROJECT_VERSION)
-    Base.metadata.create_all(bind=engine)
+app = FastAPI(title=settings.PROJECT_NAME, version=settings.PROJECT_VERSION)
+Base.metadata.create_all(bind=engine)
 
-    app.include_router(users.router, prefix="/users", tags=["users"])
-
-    return app
+app.include_router(users.router, prefix="/users", tags=["users"])
 
 
-app = start_application()
 # seed()
 
 
