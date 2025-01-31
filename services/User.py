@@ -61,3 +61,5 @@ def update_user(db: Session, id: int, user: UserUpdate) -> User:
 
 def delete_user(db: Session, id: int):
     existing_user = get_user_by_id(db, id)
+    db.delete(existing_user)
+    db.commit()

@@ -69,4 +69,7 @@ def test_update_user(test_users, db):
 
 
 def test_delete_user(test_users, db):
-    pass
+    delete_user(db, 1)
+    users = db.query(User).all()
+    assert len(users) == 1
+    assert users[0].name == "Dwight"
