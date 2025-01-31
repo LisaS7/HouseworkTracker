@@ -1,8 +1,9 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field, field_validator
 from sqlalchemy.orm import Session
 from typing import List
 from services.Task import TaskModel
 from models.Tag import Tag
+from config import settings
 
 
 class TagNotFoundException(Exception):
@@ -14,16 +15,33 @@ class TagNotFoundException(Exception):
 
 class TagModel(BaseModel):
     id: int
-    name: str
-    tasks: List[TaskModel]
+    name: str = Field(
+        ...,
+        min_length=1,
+        max_length=settings.MAX_TAG_LENGTH,
+        description=f"Tag name (1-{settings.MAX_TAG_LENGTH} characters)",
+    )
+    tasks: List[TaskModel] = Field(
+        default=[], description="List of tasks which include this tag"
+    )
 
 
 class TagCreate(BaseModel):
-    name: str | None
+    name: str = Field(
+        ...,
+        min_length=1,
+        max_length=settings.MAX_TAG_LENGTH,
+        description=f"Tag name (1-{settings.MAX_TAG_LENGTH} characters)",
+    )
 
 
 class TagUpdate(BaseModel):
-    name: str
+    name: str = Field(
+        ...,
+        min_length=1,
+        max_length=settings.MAX_TAG_LENGTH,
+        description=f"Tag name (1-{settings.MAX_TAG_LENGTH} characters)",
+    )
 
 
 def get_all_tags(db: Session) -> List[Tag]:
@@ -35,10 +53,6 @@ def get_tag_by_id(db: Session, id: int) -> Tag:
     if not tag:
         raise TagNotFoundException(id)
     return tag
-
-
-def get_tags_by_task() -> List[Tag]:
-    pass
 
 
 def create_tag(db: Session, tag: TagCreate) -> Tag:

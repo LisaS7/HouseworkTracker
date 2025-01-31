@@ -1,5 +1,5 @@
 from sqlalchemy import Table, Column, Integer, String, ForeignKey
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, validates
 from DB.session import Base
 from config import settings
 
@@ -17,3 +17,11 @@ class Tag(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(settings.MAX_TAG_LENGTH), nullable=False)
     tasks = relationship("Task", secondary=task_tags, back_populates="tags")
+
+    @validates("name")
+    def validate_name_length(self, _, value):
+        if len(value) > settings.MAX_TAG_LENGTH:
+            raise ValueError(
+                f"Tag name cannot exceed {settings.MAX_TAG_LENGTH} characters. Provided: {len(value)}"
+            )
+        return value
