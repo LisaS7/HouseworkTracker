@@ -82,7 +82,7 @@ def update_task(db: Session, id: int, task: TaskUpdate) -> Task:
     db.commit()
     db.refresh(existing_task)
 
-    return task
+    return existing_task
 
 
 def delete_task(db: Session, id: int):
