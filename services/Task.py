@@ -1,8 +1,9 @@
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 from models.Task import Task, Priority
+from models.Tag import Tag
 from datetime import date
-from typing import List
+from typing import List, Optional
 
 TODAY = date.today()
 
@@ -89,3 +90,31 @@ def delete_task(db: Session, id: int):
     existing_task = get_task_by_id(db, id)
     db.delete(existing_task)
     db.commit()
+
+
+def add_tags_to_task(db: Session, task: Task, tags: List[Tag]) -> Task:
+    for tag in tags:
+        if tag not in task.tags:
+            task.tags.append(tag)
+
+    db.commit()
+    db.refresh(task)
+    return task
+
+
+def get_tags_by_task(db: Session, id: int) -> Optional[List[Tag]]:
+    task = get_task_by_id(db, id)
+    if task.tags:
+        return task.tags
+    return None
+
+
+def remove_tag_from_task(db: Session, id: int, tag) -> Task:
+    task = get_task_by_id(db, id)
+
+    if tag in task.tags:
+        task.tags.remove(tag)
+
+    db.commit()
+    db.refresh(task)
+    return task

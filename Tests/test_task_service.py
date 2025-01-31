@@ -5,6 +5,7 @@ from DB.session import Base
 
 from models.Task import Task, Priority
 from models.User import User
+from models.Tag import Tag
 from services.Task import *
 
 from datetime import date
@@ -68,6 +69,18 @@ def test_tasks(test_users, db):
         db.refresh(task)
 
     return tasks
+
+
+@pytest.fixture
+def test_tags(db):
+    """Dummy tags for testing"""
+    tag1 = Tag(name="Tag1")
+    tag2 = Tag(name="Tag2")
+    db.add_all([tag1, tag2])
+    db.commit()
+    db.refresh(tag1)
+    db.refresh(tag2)
+    return [tag1, tag2]
 
 
 def test_get_all_tasks(test_tasks, db):
@@ -137,17 +150,32 @@ def test_delete_task(test_tasks, db):
     assert not deleted_task
 
 
-def test_get_all_tags():
-    pass
+def test_add_tags_to_task(test_tasks, test_tags, db):
+    add_tags_to_task(db, test_tasks[0], test_tags)
+    retrieved_task = db.query(Task).filter(Task.id == 1).first()
+    assert retrieved_task.tags == test_tags
 
 
-def test_get_tags_by_task():
-    pass
+def test_get_tags_by_task(test_tasks, db):
+    tags = [Tag(name="Tag1"), Tag(name="Tag2")]
+    test_tasks[0].tags = tags
+    retrieved_tags = get_tags_by_task(db, 1)
+    assert retrieved_tags == tags
 
 
-def test_update_tag():
-    pass
+def test_get_no_tags(test_tasks, db):
+    tags = get_tags_by_task(db, 1)
+    assert tags == None
 
 
-def test_delete_tag():
-    pass
+def test_remove_tag_from_task(test_tasks, test_tags, db):
+    task = test_tasks[0]
+    tag_to_remove = test_tags[0]
+    task.tags = test_tags
+
+    updated_task = remove_tag_from_task(db, 1, tag_to_remove)
+    retrieved_task = db.query(Task).filter(Task.id == 1).first()
+
+    assert updated_task == retrieved_task
+    assert len(retrieved_task.tags) == 1
+    assert tag_to_remove not in retrieved_task.tags
