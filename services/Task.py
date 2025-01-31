@@ -1,9 +1,10 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 from models.Task import Task, Priority
 from models.Tag import Tag
 from datetime import date
 from typing import List, Optional
+from config import settings
 
 TODAY = date.today()
 
@@ -17,15 +18,25 @@ class TaskNotFoundException(Exception):
 
 class TaskModel(BaseModel):
     id: int
-    title: str
+    title: str = Field(
+        ...,
+        min_length=3,
+        max_length=255,
+        description=f"Title of the task (3-{settings.MAX_TITLE_LENGTH} characters)",
+    )
     priority: Priority
-    due_date: date
-    complete: bool
+    due_date: Optional[date] = Field(None, description="Due date of the task")
+    complete: bool = Field(False, description="Indicates if the task is complete")
     user_id: int
 
 
 class TaskCreate(BaseModel):
-    title: str
+    title: str = Field(
+        ...,
+        min_length=3,
+        max_length=255,
+        description=f"Title of the task (3-{settings.MAX_TITLE_LENGTH} characters)",
+    )
     priority: Priority | None = Priority.LOW
     due_date: date | None = None
     complete: bool | None = False
@@ -33,7 +44,12 @@ class TaskCreate(BaseModel):
 
 
 class TaskUpdate(BaseModel):
-    title: str | None
+    title: Optional[str] = Field(
+        None,
+        min_length=3,
+        max_length=255,
+        description=f"Title of the task (3-{settings.MAX_TITLE_LENGTH} characters)",
+    )
     priority: Priority | None
     due_date: date | None
     complete: bool | None
@@ -104,9 +120,12 @@ def add_tags_to_task(db: Session, task: Task, tags: List[Tag]) -> Task:
 
 def get_tags_by_task(db: Session, id: int) -> Optional[List[Tag]]:
     task = get_task_by_id(db, id)
-    if task.tags:
-        return task.tags
-    return None
+    return task.tags if task.tags else None
+
+
+def get_tasks_by_tag(db: Session, tag: Tag) -> Optional[List[Task]]:
+    db.refresh(tag)  # ensures the relationship is loaded
+    return tag.tasks if tag.tasks else None
 
 
 def remove_tag_from_task(db: Session, id: int, tag) -> Task:
