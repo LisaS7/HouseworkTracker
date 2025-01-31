@@ -72,7 +72,7 @@ def test_long_title(test_user):
         ValueError,
         match=f"Title cannot exceed {max_length} characters. Provided: {test_length}",
     ):
-        task = Task(title=long_title, user_id=test_user.id)
+        Task(title=long_title, user_id=test_user.id)
 
 
 def test_default_priority(test_user, db):
@@ -88,7 +88,7 @@ def test_default_priority(test_user, db):
 def test_invalid_priority(test_user):
     invalid_word = "Banana"
     with pytest.raises(ValueError, match=f"{invalid_word} is not a valid priority"):
-        task = Task(title="Test Priority", priority=invalid_word, user_id=test_user.id)
+        Task(title="Test Priority", priority=invalid_word, user_id=test_user.id)
 
 
 def test_due_date(test_user, db):
@@ -107,7 +107,7 @@ def test_invalid_date(test_user, db):
     with pytest.raises(
         ValueError, match="Date is invalid, you provided Banana of type <class 'str'>"
     ):
-        task = Task(title="Test Date", user_id=test_user.id, due_date=due_date)
+        Task(title="Test Date", user_id=test_user.id, due_date=due_date)
 
 
 def test_task_with_tags(test_user, db):
