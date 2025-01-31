@@ -36,8 +36,9 @@ class Settings:
     DATABASE_URL = f"postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_SERVER}:{POSTGRES_PORT}/{POSTGRES_DB}"
 
     # ---- MODELS -----
-    MAX_TITLE_LENGTH: int = 255
-    MAX_TAG_LENGTH: int = 50
+    MAX_TITLE_LENGTH = 255
+    MAX_TAG_LENGTH = 50
+    MAX_USER_NAME_LENGTH = 50
 
 
 settings = Settings()
