@@ -19,6 +19,6 @@ class User(Base):
     def validate_name_length(self, _, value):
         if len(value) > settings.MAX_USER_NAME_LENGTH:
             raise ValueError(
-                f"Tag name cannot exceed {settings.MAX_USER_NAME_LENGTH} characters. Provided: {len(value)}"
+                f"User name cannot exceed {settings.MAX_USER_NAME_LENGTH} characters. Provided: {len(value)}"
             )
         return value
