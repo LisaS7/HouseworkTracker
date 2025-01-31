@@ -14,6 +14,7 @@ class Settings:
     # ---- PROJECT -----
     PROJECT_NAME: str = "Housework Tracker"
     PROJECT_VERSION: str = "1.0.0"
+    TESTING: int = os.getenv("TESTING")
 
     # ---- DB -----
     POSTGRES_USER: str = os.getenv("POSTGRES_USER")

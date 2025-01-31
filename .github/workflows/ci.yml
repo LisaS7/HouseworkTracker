@@ -11,6 +11,8 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    env:
+      TESTING: "1"
 
     steps:
       - name: Check out code
