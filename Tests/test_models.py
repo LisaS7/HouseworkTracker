@@ -1,9 +1,8 @@
 import pytest
 from datetime import date
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy.exc import IntegrityError
-
 
 from models.Task import Task, Priority
 from models.Tag import Tag
@@ -14,7 +13,6 @@ from config import settings
 
 engine = create_engine("sqlite:///:memory:", echo=True)
 Session = sessionmaker(bind=engine)
-
 
 # ---------- FIXTURES ----------
 

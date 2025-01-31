@@ -1,9 +1,9 @@
 {% extends "base.html" %} {% block title %}Tasks - Housework Tracker{% endblock
 %} {% block content %}
-<h1>Tasks</h1>
+<h1>Users</h1>
 <ul>
-  {% for task in tasks %}
-  <li>{{ task.title }} - {{ task.due_date }}</li>
+  {% for user in users %}
+  <li>{{ user.name }} - {{ user.email }}</li>
   {% endfor %}
 </ul>
 {% endblock %}

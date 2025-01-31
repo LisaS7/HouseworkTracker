@@ -1,8 +1,8 @@
 import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from DB.session import Base
 
+from DB.session import Base
 from models.User import User
 from services.User import *
 

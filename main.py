@@ -4,6 +4,8 @@ from DB.session import engine, Base
 from config import settings, templates
 from routes import users
 
+from seed import seed
+
 
 def start_application():
     app = FastAPI(title=settings.PROJECT_NAME, version=settings.PROJECT_VERSION)
@@ -15,6 +17,7 @@ def start_application():
 
 
 app = start_application()
+# seed()
 
 
 @app.get("/")
