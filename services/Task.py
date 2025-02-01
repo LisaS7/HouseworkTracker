@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from models.Task import Task, Priority
 from models.Tag import Tag
 from datetime import date
-from typing import List, Optional
+from typing import List
 from config import settings
 
 TODAY = date.today()
@@ -25,7 +25,7 @@ class TaskModel(BaseModel):
         description=f"Title of the task (3-{settings.MAX_TITLE_LENGTH} characters)",
     )
     priority: Priority
-    due_date: Optional[date] = Field(None, description="Due date of the task")
+    due_date: date | None = Field(None, description="Due date of the task")
     complete: bool = Field(False, description="Indicates if the task is complete")
     user_id: int
 
@@ -44,7 +44,7 @@ class TaskCreate(BaseModel):
 
 
 class TaskUpdate(BaseModel):
-    title: Optional[str] = Field(
+    title: str | None = Field(
         None,
         min_length=3,
         max_length=255,
@@ -118,12 +118,12 @@ def add_tags_to_task(db: Session, task: Task, tags: List[Tag]) -> Task:
     return task
 
 
-def get_tags_by_task(db: Session, id: int) -> Optional[List[Tag]]:
+def get_tags_by_task(db: Session, id: int) -> List[Tag] | None:
     task = get_task_by_id(db, id)
     return task.tags if task.tags else None
 
 
-def get_tasks_by_tag(db: Session, tag: Tag) -> Optional[List[Task]]:
+def get_tasks_by_tag(db: Session, tag: Tag) -> List[Task] | None:
     db.refresh(tag)  # ensures the relationship is loaded
     return tag.tasks if tag.tasks else None
 
