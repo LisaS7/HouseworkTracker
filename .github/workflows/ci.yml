@@ -33,7 +33,7 @@ jobs:
       - name: Run tests
         run: |
           source venv/bin/activate
-          cd HouseworkTracker
+          cd /home/runner/work/HouseworkTracker/
           pytest
   build:
     runs-on: self-hosted
