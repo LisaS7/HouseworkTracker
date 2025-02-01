@@ -24,21 +24,29 @@ class Settings:
     )  # default postgres port is 5432
     POSTGRES_DB: str = os.getenv("POSTGRES_DB", "housework")
 
-    # Determine Host
-    if os.getenv("IN_DOCKER") == "True":
-        if sys.platform.startswith("linux"):
-            POSTGRES_SERVER: str = os.getenv("LINUX_IP")
-        else:
-            POSTGRES_SERVER: str = os.getenv("POSTGRES_SERVER")
-    else:
-        POSTGRES_SERVER: str = "localhost"
-
-    DATABASE_URL = f"postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_SERVER}:{POSTGRES_PORT}/{POSTGRES_DB}"
-
     # ---- MODELS -----
     MAX_TITLE_LENGTH = 255
     MAX_TAG_LENGTH = 50
     MAX_USER_NAME_LENGTH = 50
 
+    def __init__(self, in_docker: int, platform: str):
+        self.in_docker = in_docker
+        self.platform = platform
+        self.POSTGRES_SERVER = self.get_host()
+        self.DATABASE_URL = f"postgresql://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@{self.POSTGRES_SERVER}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
 
-settings = Settings()
+    def get_host(self) -> str:
+        if self.in_docker:
+            print("in docker!")
+            if self.platform.startswith("linux"):
+                print("is linux!")
+                return os.getenv("LINUX_IP")
+            else:
+                return os.getenv("POSTGRES_SERVER")
+        else:
+            return "localhost"
+
+
+in_docker = os.getenv("IN_DOCKER")
+platform = sys.platform
+settings = Settings(in_docker, platform)
