@@ -1,11 +1,32 @@
 import os, sys
+import logging
+from datetime import date
 from fastapi.templating import Jinja2Templates
 from dotenv import load_dotenv
 
 from pathlib import Path
 
+TODAY = date.today()
+
+# ----- TEMPLATES ------
 templates = Jinja2Templates(directory="templates")
 
+
+# ----- LOGGING ------
+logger = logging.getLogger(__name__)
+
+logging.basicConfig(
+    level=logging.INFO,
+    handlers=[
+        logging.FileHandler(
+            f"logs/housework_tracker_{TODAY.strftime('%Y-%m-%d')}.log", mode="a"
+        ),
+        logging.StreamHandler(),
+    ],
+)
+
+
+# ----- ENV VARIABLES ------
 env_path = Path(".") / ".env"
 load_dotenv(dotenv_path=env_path)
 

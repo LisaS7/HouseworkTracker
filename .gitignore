@@ -27,3 +27,6 @@ ENV/
 env.bak/
 venv.bak/
 
+# Logging
+logs/
+

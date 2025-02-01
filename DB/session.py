@@ -5,14 +5,15 @@ from config import settings
 from typing import Generator
 
 TESTING = settings.TESTING
+ECHO_LOGS = False
 
 
 def get_engine(testing: int) -> tuple[Engine, sessionmaker]:
     if testing:
-        engine = create_engine("sqlite:///:memory:", echo=True)
+        engine = create_engine("sqlite:///:memory:", echo=ECHO_LOGS)
         SessionLocal = sessionmaker(bind=engine)
     else:
-        engine = create_engine(settings.DATABASE_URL)
+        engine = create_engine(settings.DATABASE_URL, echo=ECHO_LOGS)
         SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
     return engine, SessionLocal
 

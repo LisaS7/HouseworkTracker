@@ -1,7 +1,7 @@
 from sqlalchemy import Table, Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship, validates
 from DB.session import Base
-from config import settings
+from config import settings, logger
 
 # Association Table, Tag -> Task
 task_tags = Table(
@@ -20,8 +20,8 @@ class Tag(Base):
 
     @validates("name")
     def validate_name_length(self, _, value):
+        message = f"Tag name cannot exceed {settings.MAX_TAG_LENGTH} characters. Provided: {len(value)}"
         if len(value) > settings.MAX_TAG_LENGTH:
-            raise ValueError(
-                f"Tag name cannot exceed {settings.MAX_TAG_LENGTH} characters. Provided: {len(value)}"
-            )
+            logger.error(f"ValueError: {message}")
+            raise ValueError(message)
         return value
