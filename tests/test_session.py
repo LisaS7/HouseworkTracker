@@ -1,6 +1,6 @@
 import pytest
 from DB.session import get_engine
-from config import Settings
+from config import Database
 
 
 def test_engine_creation():
@@ -21,5 +21,5 @@ def test_engine_creation():
     ],
 )
 def test_host(in_docker, platform, expected_host):
-    settings = Settings(in_docker, platform)
+    settings = Database(in_docker, platform)
     assert settings.get_host() == expected_host

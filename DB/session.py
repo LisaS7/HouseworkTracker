@@ -1,11 +1,8 @@
 from sqlalchemy import create_engine
 from sqlalchemy.engine.base import Engine
 from sqlalchemy.orm import Session, sessionmaker, declarative_base
-from config import settings
+from config import settings, TESTING, ECHO_LOGS
 from typing import Generator
-
-TESTING = settings.TESTING
-ECHO_LOGS = False
 
 
 def get_engine(testing: int) -> tuple[Engine, sessionmaker]:

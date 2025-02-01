@@ -5,7 +5,7 @@ from sqlalchemy.exc import IntegrityError
 from models.Task import Task, Priority
 from models.Tag import Tag
 from models.User import User
-from config import settings
+from config import MAX_TITLE_LENGTH, MAX_TAG_LENGTH, MAX_USER_NAME_LENGTH
 
 
 # ---------- FIXTURES ----------
@@ -44,7 +44,7 @@ def test_no_title(test_user, db):
 
 
 def test_long_title(test_user):
-    max_length = settings.MAX_TITLE_LENGTH
+    max_length = MAX_TITLE_LENGTH
     test_length = max_length + 10
     long_title = "A" * (test_length)
 
@@ -111,7 +111,7 @@ def test_task_with_tags(test_user, db):
 
 
 def test_long_tag_name(db):
-    max_length = settings.MAX_TAG_LENGTH
+    max_length = MAX_TAG_LENGTH
     test_length = max_length + 10
     long_name = "A" * (test_length)
 
@@ -147,7 +147,7 @@ def test_unique_email(db):
 
 
 def test_long_user_name(db):
-    max_length = settings.MAX_USER_NAME_LENGTH
+    max_length = MAX_USER_NAME_LENGTH
     test_length = max_length + 10
     long_name = "A" * (test_length)
 

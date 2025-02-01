@@ -4,7 +4,7 @@ from models.Task import Task, Priority
 from models.Tag import Tag
 from datetime import date
 from typing import List
-from config import settings
+from config import MAX_TITLE_LENGTH
 
 TODAY = date.today()
 
@@ -22,7 +22,7 @@ class TaskModel(BaseModel):
         ...,
         min_length=3,
         max_length=255,
-        description=f"Title of the task (3-{settings.MAX_TITLE_LENGTH} characters)",
+        description=f"Title of the task (3-{MAX_TITLE_LENGTH} characters)",
     )
     priority: Priority
     due_date: date | None = Field(None, description="Due date of the task")
@@ -35,7 +35,7 @@ class TaskCreate(BaseModel):
         ...,
         min_length=3,
         max_length=255,
-        description=f"Title of the task (3-{settings.MAX_TITLE_LENGTH} characters)",
+        description=f"Title of the task (3-{MAX_TITLE_LENGTH} characters)",
     )
     priority: Priority | None = Priority.LOW
     due_date: date | None = None
@@ -48,7 +48,7 @@ class TaskUpdate(BaseModel):
         None,
         min_length=3,
         max_length=255,
-        description=f"Title of the task (3-{settings.MAX_TITLE_LENGTH} characters)",
+        description=f"Title of the task (3-{MAX_TITLE_LENGTH} characters)",
     )
     priority: Priority | None
     due_date: date | None

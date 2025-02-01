@@ -6,36 +6,50 @@ from dotenv import load_dotenv
 
 from pathlib import Path
 
-TODAY = date.today()
+# ----- ENV VARIABLES ------
+env_path = Path(".") / ".env"
+load_dotenv(dotenv_path=env_path)
+
+TESTING = os.getenv("TESTING")
+IN_DOCKER = os.getenv("IN_DOCKER")
+
+
+# ----- PROJECT ------
+PROJECT_NAME = "Housework Tracker"
+PROJECT_VERSION = "1.0.0"
+platform = sys.platform
+
+# ----- CONFIGS ------
+MAX_TITLE_LENGTH = 255
+MAX_TAG_LENGTH = 50
+MAX_USER_NAME_LENGTH = 50
 
 # ----- TEMPLATES ------
 templates = Jinja2Templates(directory="templates")
 
 
 # ----- LOGGING ------
+LOG_LEVEL = logging.INFO
+ECHO_LOGS = False
+today = date.today()
+
 logger = logging.getLogger(__name__)
 
+if TESTING:
+    filepath = f"logs/housework_tracker_test_{today.strftime('%Y-%m-%d')}.log"
+else:
+    filepath = f"logs/housework_tracker_{today.strftime('%Y-%m-%d')}.log"
+
 logging.basicConfig(
-    level=logging.INFO,
+    level=LOG_LEVEL,
     handlers=[
-        logging.FileHandler(
-            f"logs/housework_tracker_{TODAY.strftime('%Y-%m-%d')}.log", mode="a"
-        ),
+        logging.FileHandler(filepath, mode="a"),
         logging.StreamHandler(),
     ],
 )
 
 
-# ----- ENV VARIABLES ------
-env_path = Path(".") / ".env"
-load_dotenv(dotenv_path=env_path)
-
-
-class Settings:
-    # ---- PROJECT -----
-    PROJECT_NAME: str = "Housework Tracker"
-    PROJECT_VERSION: str = "1.0.0"
-    TESTING: int = os.getenv("TESTING")
+class Database:
 
     # ---- DB -----
     POSTGRES_USER: str = os.getenv("POSTGRES_USER")
@@ -44,11 +58,6 @@ class Settings:
         "POSTGRES_PORT", 5432
     )  # default postgres port is 5432
     POSTGRES_DB: str = os.getenv("POSTGRES_DB", "housework")
-
-    # ---- MODELS -----
-    MAX_TITLE_LENGTH = 255
-    MAX_TAG_LENGTH = 50
-    MAX_USER_NAME_LENGTH = 50
 
     def __init__(self, in_docker: int, platform: str):
         self.in_docker = in_docker
@@ -66,6 +75,4 @@ class Settings:
             return "localhost"
 
 
-in_docker = os.getenv("IN_DOCKER")
-platform = sys.platform
-settings = Settings(in_docker, platform)
+settings = Database(IN_DOCKER, platform)
