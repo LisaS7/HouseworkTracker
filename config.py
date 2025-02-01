@@ -30,8 +30,11 @@ templates = Jinja2Templates(directory="templates")
 
 # ----- LOGGING ------
 LOG_LEVEL = logging.INFO
+LOG_DIR = "logs"
 ECHO_LOGS = False
+
 today = date.today()
+os.makedirs(LOG_DIR, exist_ok=True)
 
 logger = logging.getLogger(__name__)
 
