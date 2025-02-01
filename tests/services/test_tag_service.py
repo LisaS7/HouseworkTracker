@@ -32,6 +32,11 @@ def test_get_tag_by_id(test_tags, db):
     assert tag.name == "Tag2"
 
 
+def test_tag_not_found(test_tags, db):
+    with pytest.raises(TagNotFoundException):
+        get_tag_by_id(db, 46)
+
+
 def test_create_tag(db):
     tag = Tag(name="Tag3")
     created_tag = create_tag(db, tag)
