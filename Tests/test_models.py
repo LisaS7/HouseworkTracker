@@ -1,34 +1,14 @@
 import pytest
 from datetime import date
 from sqlalchemy.exc import IntegrityError
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
 
 from models.Task import Task, Priority
 from models.Tag import Tag
 from models.User import User
-from DB.session import Base
 from config import settings
 
 
-engine = create_engine("sqlite:///:memory:", echo=True)
-Session = sessionmaker(bind=engine)
-
 # ---------- FIXTURES ----------
-
-
-@pytest.fixture
-def create_tables():
-    Base.metadata.create_all(engine)
-    yield
-    Base.metadata.drop_all(engine)
-
-
-@pytest.fixture
-def db(create_tables):
-    test_session = Session()
-    yield test_session
-    test_session.close()
 
 
 @pytest.fixture

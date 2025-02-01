@@ -1,27 +1,9 @@
 import pytest
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
 
-from DB.session import Base
 from models.User import User
 from services.User import *
 
-engine = create_engine("sqlite:///:memory:", echo=True)
-Session = sessionmaker(bind=engine)
-
-
-@pytest.fixture
-def create_tables():
-    Base.metadata.create_all(engine)
-    yield
-    Base.metadata.drop_all(engine)
-
-
-@pytest.fixture
-def db(create_tables):
-    test_session = Session()
-    yield test_session
-    test_session.close()
+# ---------- FIXTURES ----------
 
 
 @pytest.fixture
@@ -34,6 +16,9 @@ def test_users(db):
     db.refresh(user1)
     db.refresh(user2)
     return [user1, user2]
+
+
+# ---------- TESTS ----------
 
 
 def test_get_all_users(test_users, db):

@@ -1,20 +1,15 @@
 import pytest
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
 from DB.session import Base
 
 from models.Task import Task, Priority
 from models.User import User
 from models.Tag import Tag
 from services.Task import *
-from config import settings
 
 from datetime import date
+from tests.conftest import engine, Session
 
 TODAY = date.today()
-
-engine = create_engine("sqlite:///:memory:", echo=True)
-Session = sessionmaker(bind=engine)
 
 
 @pytest.fixture

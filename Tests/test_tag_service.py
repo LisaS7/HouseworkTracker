@@ -1,28 +1,9 @@
 import pytest
 
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-from DB.session import Base
-
 from models.Tag import Tag
 from services.Tag import *
 
-engine = create_engine("sqlite:///:memory:", echo=True)
-Session = sessionmaker(bind=engine)
-
-
-@pytest.fixture
-def create_tables():
-    Base.metadata.create_all(engine)
-    yield
-    Base.metadata.drop_all(engine)
-
-
-@pytest.fixture
-def db(create_tables):
-    test_session = Session()
-    yield test_session
-    test_session.close()
+# ---------- FIXTURES ----------
 
 
 @pytest.fixture
@@ -35,6 +16,9 @@ def test_tags(db):
     db.refresh(tag1)
     db.refresh(tag2)
     return [tag1, tag2]
+
+
+# ---------- TESTS ----------
 
 
 def test_get_all_tags(test_tags, db):
