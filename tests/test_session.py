@@ -1,13 +1,13 @@
 import pytest
-from DB.session import get_engine
-from config import Database
+from DB.session import Database
 
 
 def test_engine_creation():
-    engine, _ = get_engine(testing=True)
+    database = Database()
+    engine, _ = database.get_engine(testing=True)
     assert str(engine.url) == "sqlite:///:memory:"
 
-    engine, _ = get_engine(testing=False)
+    engine, _ = database.get_engine(testing=False)
     assert str(engine.url).startswith("postgresql")
 
 

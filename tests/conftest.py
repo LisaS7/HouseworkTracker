@@ -1,10 +1,9 @@
 import pytest
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-from DB.session import Base
+from DB.session import Base, Database
 
-engine = create_engine("sqlite:///:memory:", echo=False)
-Session = sessionmaker(bind=engine)
+database = Database()
+
+engine, session = database.get_engine(testing=True)
 
 
 @pytest.fixture
@@ -16,6 +15,6 @@ def create_tables(scope="session"):
 
 @pytest.fixture
 def db(create_tables, scope="session"):
-    test_session = Session()
+    test_session = session()
     yield test_session
     test_session.close()

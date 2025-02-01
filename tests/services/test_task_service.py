@@ -7,7 +7,7 @@ from models.Tag import Tag
 from services.Task import *
 
 from datetime import date
-from tests.conftest import engine, Session
+from tests.conftest import engine, session
 
 TODAY = date.today()
 
@@ -21,7 +21,7 @@ def create_tables():
 
 @pytest.fixture
 def db(create_tables):
-    test_session = Session()
+    test_session = session()
     yield test_session
     test_session.close()
 
