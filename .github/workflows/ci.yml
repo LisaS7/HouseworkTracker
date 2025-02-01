@@ -14,6 +14,7 @@ jobs:
     env:
       TESTING: "1"
       LINUX_IP: "172.17.0.1"
+      DOCKER_HOST: "host.docker.internal"
 
     steps:
       - name: Check out code

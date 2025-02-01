@@ -37,12 +37,10 @@ class Settings:
 
     def get_host(self) -> str:
         if self.in_docker:
-            print("in docker!")
             if self.platform.startswith("linux"):
-                print("is linux!")
                 return os.getenv("LINUX_IP")
             else:
-                return os.getenv("POSTGRES_SERVER")
+                return os.getenv("DOCKER_HOST")
         else:
             return "localhost"
 
