@@ -1,16 +1,23 @@
-import os
 from sqlalchemy import create_engine
+from sqlalchemy.engine.base import Engine
 from sqlalchemy.orm import Session, sessionmaker, declarative_base
 from config import settings
 from typing import Generator
 
-if settings.TESTING:
-    engine = create_engine("sqlite:///:memory:", echo=True)
-    SessionLocal = sessionmaker(bind=engine)
-else:
-    engine = create_engine(settings.DATABASE_URL)
-    SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+TESTING = settings.TESTING
 
+
+def get_engine(testing: int) -> tuple[Engine, sessionmaker]:
+    if testing:
+        engine = create_engine("sqlite:///:memory:", echo=True)
+        SessionLocal = sessionmaker(bind=engine)
+    else:
+        engine = create_engine(settings.DATABASE_URL)
+        SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+    return engine, SessionLocal
+
+
+engine, SessionLocal = get_engine(TESTING)
 Base = declarative_base()
 
 
