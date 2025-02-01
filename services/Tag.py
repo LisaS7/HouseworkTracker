@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 from typing import List
 from services.Task import TaskModel
@@ -10,6 +10,7 @@ class TagNotFoundException(Exception):
     def __init__(self, id: int):
         self.message = f"Tag not found for id {id}"
         self.status_code = 404
+        logger.error(f"TagNotFoundException: {self.message}")
         super().__init__(self.message)
 
 
@@ -51,7 +52,6 @@ def get_all_tags(db: Session) -> List[Tag]:
 def get_tag_by_id(db: Session, id: int) -> Tag:
     tag = db.query(Tag).filter(Tag.id == id).first()
     if not tag:
-        logger.error(f"Tag not found for id {id}")
         raise TagNotFoundException(id)
     return tag
 

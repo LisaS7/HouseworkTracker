@@ -2,12 +2,14 @@ from pydantic import BaseModel, EmailStr
 from sqlalchemy.orm import Session
 from models.User import User
 from typing import List
+from config import logger
 
 
 class UserNotFoundException(Exception):
     def __init__(self, id: int):
         self.message = f"User not found for id {id}"
         self.status_code = 404
+        logger.error(f"UserNotFoundException: {self.message}")
         super().__init__(self.message)
 
 

@@ -4,7 +4,7 @@ from models.Task import Task, Priority
 from models.Tag import Tag
 from datetime import date
 from typing import List
-from config import MAX_TITLE_LENGTH
+from config import logger, MAX_TITLE_LENGTH
 
 TODAY = date.today()
 
@@ -13,6 +13,7 @@ class TaskNotFoundException(Exception):
     def __init__(self, id: int):
         self.message = f"Task not found for id {id}"
         self.status_code = 404
+        logger.error(f"TaskNotFoundException: {self.message}")
         super().__init__(self.message)
 
 
