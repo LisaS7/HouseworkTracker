@@ -1,7 +1,7 @@
 from sqlalchemy import Table, Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship, validates
 from DB.session import Base
-from config import settings, logger, MAX_TAG_LENGTH
+from config import logger, MAX_TAG_LENGTH
 
 # Association Table, Tag -> Task
 task_tags = Table(
@@ -27,4 +27,4 @@ class Tag(Base):
         return value
 
     def __str__(self):
-        return f"<Tag id={self.id} name={self.name}>"
+        return f"<Tag id={self.id} name={self.name} task_count={len(self.tasks)}>"

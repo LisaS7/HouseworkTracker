@@ -22,3 +22,6 @@ class User(Base):
             logger.error(f"ValueError: {message}")
             raise ValueError(message)
         return value
+
+    def __str__(self):
+        return f"<User id={self.id} name={self.name} email={self.email} active={self.active} task_count={len(self.tasks)}>"

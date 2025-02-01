@@ -55,3 +55,6 @@ class Task(Base):
 
         if isinstance(value, dt.date):
             return value
+
+    def __str__(self):
+        return f"<Task id={self.id} title={self.title} priority={self.priority} due_date={self.due_date} complete={self.complete} user_id={self.user_id} tag_count={len(self.tags)}>"
