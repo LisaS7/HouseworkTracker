@@ -46,22 +46,26 @@ def create_user(db: Session, user: UserCreate) -> User:
     db.add(user)
     db.commit()
     db.refresh(user)
+    logger.info(f"Created {user}")
     return user
 
 
 def update_user(db: Session, id: int, user: UserUpdate) -> User:
     existing_user = get_user_by_id(db, id)
+    logger.info(f"Updating old User: {existing_user}")
 
     for key, value in user.items():
         setattr(existing_user, key, value)
 
     db.commit()
     db.refresh(existing_user)
+    logger.info(f"Updated to new User: {existing_user}")
 
     return existing_user
 
 
 def delete_user(db: Session, id: int):
     existing_user = get_user_by_id(db, id)
+    logger.info(f"Deleting {existing_user}")
     db.delete(existing_user)
     db.commit()

@@ -88,28 +88,34 @@ def create_task(db: Session, task: TaskCreate) -> Task:
     db.add(task)
     db.commit()
     db.refresh(task)
+    logger.info(f"Created {task}")
     return task
 
 
 def update_task(db: Session, id: int, task: TaskUpdate) -> Task:
     existing_task = get_task_by_id(db, id)
+    logger.info(f"Updating old Task: {existing_task}")
 
     for key, value in task.items():
         setattr(existing_task, key, value)
 
     db.commit()
     db.refresh(existing_task)
+    logger.info(f"Updated to new Task: {existing_task}")
 
     return existing_task
 
 
 def delete_task(db: Session, id: int):
     existing_task = get_task_by_id(db, id)
+    logger.info(f"Deleting {existing_task}")
     db.delete(existing_task)
     db.commit()
 
 
 def add_tags_to_task(db: Session, task: Task, tags: List[Tag]) -> Task:
+    logger.info(f"Adding tags {[str(tag) for tag in tags]}")
+    logger.info(f"to task {task}")
     for tag in tags:
         if tag not in task.tags:
             task.tags.append(tag)
@@ -131,7 +137,8 @@ def get_tasks_by_tag(db: Session, tag: Tag) -> List[Task] | None:
 
 def remove_tag_from_task(db: Session, id: int, tag) -> Task:
     task = get_task_by_id(db, id)
-
+    logger.info(f"Removing tag {tag}")
+    logger.info(f"from task {task}")
     if tag in task.tags:
         task.tags.remove(tag)
 
