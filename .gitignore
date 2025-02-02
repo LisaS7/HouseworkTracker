@@ -30,3 +30,6 @@ venv.bak/
 # Logging
 logs/
 
+# Planning
+planning/
+
