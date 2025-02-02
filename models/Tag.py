@@ -1,18 +1,18 @@
 from sqlalchemy import Table, Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship, validates
-from DB.session import Base
+from DB.session import Database
 from config import logger, MAX_TAG_LENGTH
 
 # Association Table, Tag -> Task
 task_tags = Table(
     "task_tags",
-    Base.metadata,
+    Database.Base.metadata,
     Column("task_id", Integer, ForeignKey("tasks.id"), primary_key=True),
     Column("tag_id", Integer, ForeignKey("tags.id"), primary_key=True),
 )
 
 
-class Tag(Base):
+class Tag(Database.Base):
     __tablename__ = "tags"
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(MAX_TAG_LENGTH), nullable=False)

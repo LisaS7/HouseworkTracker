@@ -1,11 +1,11 @@
 from sqlalchemy import create_engine
-from sqlalchemy.engine.base import Engine
 from sqlalchemy.orm import Session, sessionmaker, declarative_base
 from config import TESTING, ECHO_LOGS, database_config, IN_DOCKER, platform
 from typing import Generator
 
 
 class Database:
+    Base = declarative_base()
 
     # ---- DB -----
     POSTGRES_USER: str = database_config.user
@@ -19,8 +19,6 @@ class Database:
         self.POSTGRES_SERVER = self.get_host()
         self.DATABASE_URL = f"postgresql://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@{self.POSTGRES_SERVER}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
 
-        self.session = None
-
     def get_host(self) -> str:
         if self.in_docker:
             if self.platform.startswith("linux"):
@@ -30,26 +28,34 @@ class Database:
         else:
             return "localhost"
 
-    def get_engine(self, testing: int) -> tuple[Engine, sessionmaker]:
+    def set_engine(self, testing: bool) -> sessionmaker:
         if testing:
-            engine = create_engine("sqlite:///:memory:", echo=ECHO_LOGS)
-            self.session = sessionmaker(bind=engine)
+            self.engine = create_engine(
+                "sqlite:///:memory:",
+                echo=ECHO_LOGS,
+                connect_args={"check_same_thread": False},
+            )
         else:
-            engine = create_engine(self.DATABASE_URL, echo=ECHO_LOGS)
-            self.session = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-        return engine, self.session
+            self.engine = create_engine(self.DATABASE_URL, echo=ECHO_LOGS)
+
+        self.Base.metadata.create_all(bind=self.engine)
+
+    def get_session(self):
+        session_local = sessionmaker(
+            autocommit=False, autoflush=False, bind=self.engine
+        )
+        return session_local()
 
 
 database = Database(IN_DOCKER, platform)
-
-engine, SessionLocal = database.get_engine(TESTING)
-Base = declarative_base()
+database.set_engine(TESTING)
 
 
 # This function grabs a fresh db connection.
 # It closes the connection once it is no longer needed.
 def get_db() -> Generator[Session, None, None]:
-    db = SessionLocal()
+    session = database.get_session()
+    db = session()
     try:
         yield db
     finally:

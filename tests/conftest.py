@@ -1,20 +1,19 @@
 import pytest
-from DB.session import Base, Database
+from DB.session import Database
 
 database = Database()
-
-engine, session = database.get_engine(testing=True)
+database.set_engine(testing=True)
 
 
 @pytest.fixture
 def create_tables(scope="session"):
-    Base.metadata.create_all(engine)
+    Database.Base.metadata.create_all(bind=database.engine)
     yield
-    Base.metadata.drop_all(engine)
+    Database.Base.metadata.drop_all(database.engine)
 
 
 @pytest.fixture
-def db(create_tables, scope="session"):
-    test_session = session()
+def db(create_tables, scope="function"):
+    test_session = database.get_session()
     yield test_session
     test_session.close()

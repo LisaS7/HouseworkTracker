@@ -1,9 +1,9 @@
 from models.Task import Task
 from models.User import User
 from services.User import create_user
-from DB.session import SessionLocal
+from DB.session import database
 
-db = SessionLocal()
+db = database.get_session()
 
 
 def seed():

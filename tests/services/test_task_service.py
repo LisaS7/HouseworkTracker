@@ -1,5 +1,5 @@
 import pytest
-from DB.session import Base
+from DB.session import database
 
 from models.Task import Task, Priority
 from models.User import User
@@ -7,23 +7,8 @@ from models.Tag import Tag
 from services.Task import *
 
 from datetime import date
-from tests.conftest import engine, session
 
 TODAY = date.today()
-
-
-@pytest.fixture
-def create_tables():
-    Base.metadata.create_all(engine)
-    yield
-    Base.metadata.drop_all(engine)
-
-
-@pytest.fixture
-def db(create_tables):
-    test_session = session()
-    yield test_session
-    test_session.close()
 
 
 @pytest.fixture
@@ -162,6 +147,7 @@ def test_get_tags_by_task(test_tasks, db):
 def test_get_tasks_by_tag(test_tasks, test_tags, db):
     test_tasks[0].tags = test_tags
     test_tasks[1].tags = test_tags
+    db.commit()
     retrieved_tasks = get_tasks_by_tag(db, test_tags[0])
     assert retrieved_tasks == [test_tasks[0], test_tasks[1]]
 

@@ -1,11 +1,11 @@
 from sqlalchemy import Column, String, Boolean, Integer
 from sqlalchemy.orm import relationship, validates
 
-from DB.session import Base
+from DB.session import Database
 from config import logger, MAX_USER_NAME_LENGTH
 
 
-class User(Base):
+class User(Database.Base):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, autoincrement=True)

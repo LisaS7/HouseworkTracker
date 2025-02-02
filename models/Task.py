@@ -4,7 +4,7 @@ from sqlalchemy import Column, Integer, String, Boolean, Date, ForeignKey, Enum
 from sqlalchemy.orm import relationship, validates
 
 from models.Tag import task_tags
-from DB.session import Base
+from DB.session import Database
 from config import logger, MAX_TITLE_LENGTH
 
 
@@ -14,7 +14,7 @@ class Priority(enum.Enum):
     HIGH = "HIGH"
 
 
-class Task(Base):
+class Task(Database.Base):
     __tablename__ = "tasks"
 
     id = Column(Integer, primary_key=True, autoincrement=True)

@@ -4,11 +4,11 @@ from DB.session import Database
 
 def test_engine_creation():
     database = Database()
-    engine, _ = database.get_engine(testing=True)
-    assert str(engine.url) == "sqlite:///:memory:"
+    database.set_engine(testing=True)
+    assert str(database.engine.url) == "sqlite:///:memory:"
 
-    engine, _ = database.get_engine(testing=False)
-    assert str(engine.url).startswith("postgresql")
+    database.set_engine(testing=False)
+    assert str(database.engine.url).startswith("postgresql")
 
 
 @pytest.mark.parametrize(
