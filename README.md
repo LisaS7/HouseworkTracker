@@ -62,7 +62,7 @@ This will start the development server on http://127.0.0.1:8000.
 
 ### Docker
 
-Alternatively, after cloning the repository, run in a docker container:
+Alternatively, after cloning the repository, run in a docker container with the provided Dockerfile:
 
 ```
 docker build -t houseworktracker:latest .
