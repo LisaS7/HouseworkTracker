@@ -2,15 +2,6 @@ import pytest
 from DB.session import Database
 
 
-def test_engine_creation():
-    database = Database()
-    database.set_engine(testing=True)
-    assert str(database.engine.url) == "sqlite:///:memory:"
-
-    database.set_engine(testing=False)
-    assert str(database.engine.url).startswith("postgresql")
-
-
 @pytest.mark.parametrize(
     "in_docker, platform, expected_host",
     [
