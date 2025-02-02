@@ -3,23 +3,6 @@ import pytest
 from models.User import User
 from services.User import *
 
-# ---------- FIXTURES ----------
-
-
-@pytest.fixture
-def test_users(db):
-    """Dummy users for testing"""
-    user1 = User(name="Michael", email="michael@dundermifflin.com")
-    user2 = User(name="Dwight", email="dwight@dundermifflin.com")
-    db.add_all([user1, user2])
-    db.commit()
-    db.refresh(user1)
-    db.refresh(user2)
-    return [user1, user2]
-
-
-# ---------- TESTS ----------
-
 
 def test_get_all_users(test_users, db):
     users = get_all_users(db)

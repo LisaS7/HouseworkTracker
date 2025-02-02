@@ -126,11 +126,11 @@ def test_long_tag_name(db):
 
 
 def test_default_active(db):
-    user = User(name="Michael Scott", email="michael@dundermifflin.com")
+    user = User(name="Pam", email="pam@dundermifflin.com")
     db.add(user)
     db.commit()
     db.refresh(user)
-    retrieved_user = db.query(User).filter_by(name="Michael Scott").first()
+    retrieved_user = db.query(User).filter_by(name="Pam").first()
 
     assert retrieved_user.active == True
 

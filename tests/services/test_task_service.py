@@ -1,26 +1,12 @@
 import pytest
-from DB.session import database
 
 from models.Task import Task, Priority
-from models.User import User
 from models.Tag import Tag
 from services.Task import *
 
 from datetime import date
 
 TODAY = date.today()
-
-
-@pytest.fixture
-def test_users(db):
-    """Dummy users for testing"""
-    user1 = User(name="Michael", email="michael@dundermifflin.com")
-    user2 = User(name="Dwight", email="dwight@dundermifflin.com")
-    db.add_all([user1, user2])
-    db.commit()
-    db.refresh(user1)
-    db.refresh(user2)
-    return [user1, user2]
 
 
 @pytest.fixture
