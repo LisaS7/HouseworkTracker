@@ -44,14 +44,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Explicitly set SSH_AUTH_SOCK to point to the correct socket
-      - name: Set SSH_AUTH_SOCK
-        run: echo "SSH_AUTH_SOCK=/tmp/ssh-XXXXXX/agent.XXXX" >> $GITHUB_ENV
-
       - name: Check SSH Agent
         run: |
           echo $SSH_AUTH_SOCK
           ssh-add -l
+
+      # Explicitly set SSH_AUTH_SOCK to point to the correct socket
+      - name: Set SSH_AUTH_SOCK
+        run: echo "SSH_AUTH_SOCK=/tmp/ssh-XXXXXX/agent.XXXX" >> $GITHUB_ENV
 
       # Test SSH key access to GitHub
       - name: Test SSH access to GitHub
