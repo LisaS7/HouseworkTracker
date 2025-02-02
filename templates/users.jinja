@@ -2,8 +2,12 @@
 %} {% block content %}
 <h1>Users</h1>
 <ul>
+  <div class="row g-3">
   {% for user in users %}
-  <li>{{ user.name }} - {{ user.email }}</li>
+    <div class="col-md-4">
+    {% include 'components/user_card.jinja' %}
+    </div>
   {% endfor %}
+  </div>
 </ul>
 {% endblock %}
