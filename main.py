@@ -18,4 +18,4 @@ app.include_router(users.router, prefix="/users", tags=["users"])
 
 @app.get("/")
 def main(request: Request):
-    return templates.TemplateResponse(request=request, name="home.html")
+    return templates.TemplateResponse(request=request, name="home.jinja")

@@ -13,12 +13,10 @@ async def all_users(request: Request, db: Session = Depends(get_db)):
     data = get_all_users(db)
 
     accept_header = request.headers.get("Accept", "")
-    logger.warning(accept_header)
-    print(accept_header)
 
     if "application/json" in accept_header:
         return JSONResponse(content=data)
 
     return templates.TemplateResponse(
-        "users.html", context={"request": request, "users": data}
+        "users.jinja", context={"request": request, "users": data}
     )
