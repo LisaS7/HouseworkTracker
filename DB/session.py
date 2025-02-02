@@ -17,7 +17,6 @@ class Database:
         self.in_docker = in_docker
         self.platform = platform
         self.POSTGRES_SERVER = self.get_host()
-        self.DATABASE_URL = f"postgresql://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@{self.POSTGRES_SERVER}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
 
     def get_host(self) -> str:
         if self.in_docker:
@@ -36,15 +35,13 @@ class Database:
                 connect_args={"check_same_thread": False},
             )
         else:
-            self.engine = create_engine(self.DATABASE_URL, echo=ECHO_LOGS)
+            database_url = f"postgresql://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@{self.POSTGRES_SERVER}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
+            self.engine = create_engine(database_url, echo=ECHO_LOGS)
 
         self.Base.metadata.create_all(bind=self.engine)
 
     def get_session(self):
-        session_local = sessionmaker(
-            autocommit=False, autoflush=False, bind=self.engine
-        )
-        return session_local()
+        return sessionmaker(autocommit=False, autoflush=False, bind=self.engine)
 
 
 database = Database(IN_DOCKER, platform)
@@ -54,8 +51,8 @@ database.set_engine(TESTING)
 # This function grabs a fresh db connection.
 # It closes the connection once it is no longer needed.
 def get_db() -> Generator[Session, None, None]:
-    session = database.get_session()
-    db = session()
+    session_local = database.get_session()
+    db = session_local()
     try:
         yield db
     finally:

@@ -14,6 +14,7 @@ def create_tables(scope="session"):
 
 @pytest.fixture
 def db(create_tables, scope="function"):
-    test_session = database.get_session()
-    yield test_session
-    test_session.close()
+    test_session_local = database.get_session()
+    db = test_session_local()
+    yield db
+    db.close()
