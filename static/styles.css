@@ -1,0 +1,70 @@
+/* ==========================
+   Font
+   ========================== */
+
+@import url("https://fonts.googleapis.com/css2?family=Iceland&display=swap");
+
+.iceland-regular {
+  font-family: "Iceland", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+/* ==========================
+   Base Styles (and Bootstrap overrides)
+   ========================== */
+
+:root {
+  --bold-blue: #69d2e7;
+  --pale-blue: #a7dbd8;
+  --turquoise: rgb(29, 234, 166);
+}
+
+body {
+  background-color: aliceblue;
+}
+
+.card {
+  box-shadow: 4px 4px 1px rgba(0, 0, 0, 0.8) !important;
+}
+
+.border {
+  border: 3px solid black !important;
+}
+
+.border-top {
+  border-top: 3px solid black !important;
+}
+
+.border-bottom {
+  border-bottom: 3px solid black !important;
+}
+
+/* ==========================
+   Header & Nav
+   ========================== */
+
+.page-title {
+  font-size: 2rem;
+  text-align: center;
+  width: 100%;
+}
+
+.nav-item {
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+}
+
+.nav-item:hover {
+  background-color: var(--bold-blue);
+  border: 1px solid black;
+}
+
+/* ==========================
+   Buttons
+   ========================== */
+
+.badge.bg-success {
+  background-color: var(--turquoise) !important;
+  box-shadow: 4px 4px 1px rgba(0, 0, 0, 0.8);
+}
