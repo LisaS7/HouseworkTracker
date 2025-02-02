@@ -1,0 +1,17 @@
+<div class="card shadow-sm mt-3">
+    <div class="card-body">
+        <h5 class="card-title">{{ user.name }}</h5>
+        <h6 class="card-subtitle mb-2 text-muted">{{ user.email }}</h6>
+        <p class="card-text">
+            <strong>Status:</strong> 
+            {% if user.active %}
+                <span class="badge bg-success mx-2">Active</span>
+            {% else %}
+                <span class="badge bg-danger mx-2">Inactive</span>
+            {% endif %}
+        </p>
+        <p class="card-text">
+            <strong>Tasks:</strong> {{ user.tasks | length }}
+        </p>
+    </div>
+</div>
