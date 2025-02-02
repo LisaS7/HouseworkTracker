@@ -1,3 +1,5 @@
 [run]
 omit =
     seed.py
+    config.py
+    DB/session.py
