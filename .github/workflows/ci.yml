@@ -46,7 +46,7 @@ jobs:
 
       # Explicitly set SSH_AUTH_SOCK to point to the correct socket
       - name: Set SSH_AUTH_SOCK
-        run: echo "SSH_AUTH_SOCK=/tmp/ssh-K5ryRXuQr65q/agent.52087" >> $GITHUB_ENV
+        run: echo "SSH_AUTH_SOCK=/tmp/ssh-K5ryRXuQr65q/agent.50656" >> $GITHUB_ENV
 
       - name: Check SSH Agent
         run: |
