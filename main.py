@@ -17,6 +17,7 @@ app.include_router(users.router, prefix="/users", tags=["users"])
 
 if not TESTING:
     app.mount("/static", StaticFiles(directory="static"), name="static")
+    database.set_engine(testing=TESTING)
 
 
 @app.get("/")
