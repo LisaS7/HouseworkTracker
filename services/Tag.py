@@ -1,9 +1,9 @@
-from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 from typing import List
-from services.Task import TaskModel
+
 from models.Tag import Tag
-from config import logger, MAX_TAG_LENGTH
+from services.schemas import TagCreate, TagUpdate
+from config import logger
 
 
 class TagNotFoundException(Exception):
@@ -12,37 +12,6 @@ class TagNotFoundException(Exception):
         self.status_code = 404
         logger.error(f"TagNotFoundException: {self.message}")
         super().__init__(self.message)
-
-
-class TagModel(BaseModel):
-    id: int
-    name: str = Field(
-        ...,
-        min_length=1,
-        max_length=MAX_TAG_LENGTH,
-        description=f"Tag name (1-{MAX_TAG_LENGTH} characters)",
-    )
-    tasks: List[TaskModel] = Field(
-        default=[], description="List of tasks which include this tag"
-    )
-
-
-class TagCreate(BaseModel):
-    name: str = Field(
-        ...,
-        min_length=1,
-        max_length=MAX_TAG_LENGTH,
-        description=f"Tag name (1-{MAX_TAG_LENGTH} characters)",
-    )
-
-
-class TagUpdate(BaseModel):
-    name: str = Field(
-        ...,
-        min_length=1,
-        max_length=MAX_TAG_LENGTH,
-        description=f"Tag name (1-{MAX_TAG_LENGTH} characters)",
-    )
 
 
 def get_all_tags(db: Session) -> List[Tag]:
