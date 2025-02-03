@@ -10,6 +10,8 @@ from models.Task import Task
 from models.Tag import Tag
 from models.User import User
 
+from scripts import seed
+
 
 app = FastAPI(title=PROJECT_NAME, version=PROJECT_VERSION)
 
@@ -18,6 +20,8 @@ app.include_router(users.router, prefix="/users", tags=["users"])
 if not TESTING:
     app.mount("/static", StaticFiles(directory="static"), name="static")
     database.set_engine(testing=TESTING)
+
+seed.seed()
 
 
 @app.get("/")

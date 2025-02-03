@@ -11,35 +11,53 @@ db = local()
 
 
 def seed():
-    user1 = User(name="Michael", email="michael@dundermifflin.com")
-    user2 = User(name="Dwight", email="dwight@dundermifflin.com")
+    user1 = User(name="Lisa", email="lisa@example.com")
+    user2 = User(name="Simon", email="simon@example.com")
 
     # create_user(db, user1)
     # create_user(db, user2)
 
-    tag1 = Tag(name="Tag1")
-    tag2 = Tag(name="Tag2")
-    create_tag(db, tag1)
-    create_tag(db, tag2)
+    living_room = Tag(name="Living Room")
+    kitchen = Tag(name="Kitchen")
+    downstairs_hall = Tag(name="Hall (Downstairs)")
+    office = Tag(name="Office")
+    alec_room = Tag(name="Alec's Room")
+    our_room = Tag(name="Our Room")
+    shower = Tag(name="Shower")
+    bathroom = Tag(name="Bathroom")
+
+    tags = [
+        living_room,
+        kitchen,
+        downstairs_hall,
+        office,
+        alec_room,
+        our_room,
+        shower,
+        bathroom,
+    ]
+
+    # for tag in tags:
+    #     create_tag(db, tag)
 
     tasks = [
         Task(
-            title="Mop kitchen",
-            priority=Priority.HIGH,
-            due_date="2025-01-21",
+            title="Mop floor",
+            priority=Priority.LOW,
+            last_completed="2025-01-21",
             user=user1,
+            tags=[kitchen],
         ),
-        Task(title="Clean oven", due_date="2025-01-30", user=user1),
-        Task(title="Wash dishes", due_date="2025-02-15", user=user2),
-        Task(title="Feed the cat", due_date="2025-02-04", user=user2),
-        Task(
-            title="Grocery shopping", due_date="2025-04-30", user=user2, complete=True
-        ),
+        Task(title="Change bed", user=user1, tags=[our_room]),
+        Task(title="Clean toilet", user=user1, tags=[bathroom]),
+        Task(title="Clean sink", user=user1, tags=[bathroom]),
+        Task(title="Clean worktops", user=user1, tags=[kitchen]),
+        Task(title="Empty cardboard recycling", user=user1, tags=[kitchen]),
+        Task(title="Clean and tidy dining table", user=user1, tags=[living_room]),
+        Task(title="Empty main bin", user=user1, tags=[kitchen]),
+        Task(title="Empty plastic/cans recycling", user=user1, tags=[kitchen]),
+        Task(title="Clean sink", user=user1, tags=[kitchen]),
     ]
 
-    tasks[0].tags = [tag1, tag2]
-    tasks[1].tags = [tag2]
-    tasks[2].tags = [tag1]
-
-    for task in tasks:
-        create_task(db, task)
+    # for task in tasks:
+    #     create_task(db, task)
