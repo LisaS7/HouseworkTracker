@@ -1,10 +1,11 @@
-from pydantic import BaseModel, Field
-from sqlalchemy.orm import Session
-from models.Task import Task, Priority
-from models.Tag import Tag
 from datetime import date
 from typing import List
-from config import logger, MAX_TITLE_LENGTH
+from sqlalchemy.orm import Session
+
+from models.Task import Task
+from models.Tag import Tag
+from services.schemas import TaskCreate, TaskUpdate
+from config import logger
 
 TODAY = date.today()
 
@@ -17,46 +18,6 @@ class TaskNotFoundException(Exception):
         super().__init__(self.message)
 
 
-class TaskModel(BaseModel):
-    id: int
-    title: str = Field(
-        ...,
-        min_length=3,
-        max_length=255,
-        description=f"Title of the task (3-{MAX_TITLE_LENGTH} characters)",
-    )
-    priority: Priority
-    due_date: date | None = Field(None, description="Due date of the task")
-    complete: bool = Field(False, description="Indicates if the task is complete")
-    user_id: int
-
-
-class TaskCreate(BaseModel):
-    title: str = Field(
-        ...,
-        min_length=3,
-        max_length=255,
-        description=f"Title of the task (3-{MAX_TITLE_LENGTH} characters)",
-    )
-    priority: Priority | None = Priority.LOW
-    due_date: date | None = None
-    complete: bool | None = False
-    user_id: int
-
-
-class TaskUpdate(BaseModel):
-    title: str | None = Field(
-        None,
-        min_length=3,
-        max_length=255,
-        description=f"Title of the task (3-{MAX_TITLE_LENGTH} characters)",
-    )
-    priority: Priority | None
-    due_date: date | None
-    complete: bool | None
-    user_id: int
-
-
 def get_all_tasks(db: Session) -> List[Task]:
     return db.query(Task).all()
 
@@ -66,11 +27,11 @@ def get_all_incomplete_tasks(db: Session) -> List[Task]:
 
 
 def get_all_overdue_tasks(db: Session) -> List[Task]:
-    return db.query(Task).filter(Task.due_date < TODAY, Task.complete == False).all()
+    return db.query(Task).filter(Task.next_due < TODAY).all()
 
 
 def get_todays_tasks(db: Session) -> List[Task]:
-    return db.query(Task).filter(Task.due_date == TODAY, Task.complete == False).all()
+    return db.query(Task).filter(Task.next_due == TODAY).all()
 
 
 def get_tasks_by_user(db: Session, id: int) -> List[Task]:

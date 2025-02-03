@@ -71,23 +71,23 @@ def test_invalid_priority(test_user):
         Task(title="Test Priority", priority=invalid_word, user_id=test_user.id)
 
 
-def test_due_date(test_user, db):
-    due_date = date(2025, 1, 1)
-    task = Task(title="Test Date", user_id=test_user.id, due_date=due_date)
+def test_last_completed(test_user, db):
+    last_date = date(2025, 1, 1)
+    task = Task(title="Test Date", user_id=test_user.id, last_completed=last_date)
     db.add(task)
     db.commit()
     db.refresh(task)
     retrieved_task = db.query(Task).filter_by(title="Test Date").first()
 
-    assert retrieved_task.due_date == due_date
+    assert retrieved_task.last_completed == last_date
 
 
 def test_invalid_date(test_user, db):
-    due_date = "Banana"
+    test = "Banana"
     with pytest.raises(
         ValueError, match="Date is invalid, you provided Banana of type <class 'str'>"
     ):
-        Task(title="Test Date", user_id=test_user.id, due_date=due_date)
+        Task(title="Test Date", user_id=test_user.id, last_completed=test)
 
 
 # ---------- TAGS ----------
