@@ -26,7 +26,7 @@ class Task(Database.Base):
     title = Column(String(MAX_TITLE_LENGTH), nullable=False)
     priority = Column(Enum(Priority), default=Priority.LOW)
     last_completed = Column(Date)
-    repeat_interval = Column(Integer)
+    repeat_interval = Column(Integer, default=0)
 
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     user = relationship("User", back_populates="tasks")
@@ -45,6 +45,23 @@ class Task(Database.Base):
             logger.error(f"ValueError: {message}")
             raise ValueError(message)
         return value
+
+    @validates("repeat_interval")
+    def validate_repeat_interval(self, _, value):
+        if not isinstance(value, int):
+            try:
+                int_value = int(value)
+            except:
+                message = f"{value} is not a valid integer"
+                logger.error(message)
+                raise ValueError(message)
+
+        if int_value > 0:
+            return int_value
+        else:
+            message = f"Repeat interval cannot be a negative number ({value})"
+            logger.error(message)
+            raise ValueError(message)
 
     @validates("priority")
     def validate_priority(self, _, value):

@@ -1,0 +1,29 @@
+{% extends "base.jinja" %} {% block title %}Tasks - Housework Tracker{% endblock
+    %} {% block content %}
+    <h1>Tasks</h1>
+    <div class="container">
+        <div class="row">
+          <div class="col-4">
+            <h2>Low Priority</h2>
+            {% for task in tasks if task.priority == Priority.LOW %}
+                {% include 'components/task_card.jinja' %}
+            {% endfor %}
+          </div>
+      
+          <div class="col-4">
+            <h2>Medium Priority</h2>
+            {% for task in tasks if task.priority == Priority.MEDIUM %}
+                {% include 'components/task_card.jinja' %}
+            {% endfor %}
+          </div>
+      
+          <div class="col-4">
+            <h2>High Priority</h2>
+            {% for task in tasks if task.priority == Priority.HIGH %}
+                {% include 'components/task_card.jinja' %}
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+    {% endblock %}

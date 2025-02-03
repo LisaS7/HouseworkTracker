@@ -51,8 +51,8 @@ class TaskModel(BaseModel):
     last_completed: date | None = Field(
         None, description="Date the task was last completed"
     )
-    repeat_interval: int | None = Field(
-        None, description="The number of days between repeat tasks"
+    repeat_interval: int = Field(
+        0, description="The number of days between repeat tasks"
     )
     user_id: int
 
