@@ -1,6 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, sessionmaker, declarative_base
-from config import TESTING, ECHO_LOGS, database_config, IN_DOCKER, platform
+from sqlalchemy.exc import OperationalError
+from config import TESTING, ECHO_LOGS, database_config, IN_DOCKER, platform, logger
 from typing import Generator
 
 
@@ -36,9 +37,14 @@ class Database:
             )
         else:
             database_url = f"postgresql://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@{self.POSTGRES_SERVER}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
+            logger.info(f"CONNECTING:    {database_url}")
             self.engine = create_engine(database_url, echo=ECHO_LOGS)
 
-        self.Base.metadata.create_all(bind=self.engine)
+        try:
+            self.Base.metadata.create_all(bind=self.engine)
+            logger.info("Tables created successfully.")
+        except OperationalError as e:
+            logger.error(f"Error creating tables: {e}")
 
     def get_session(self):
         return sessionmaker(autocommit=False, autoflush=False, bind=self.engine)
