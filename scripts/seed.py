@@ -1,10 +1,11 @@
-from models.Task import Task, Priority
+from models.Task import Task
 from models.Tag import Tag
 from models.User import User
 from services.User import create_user
 from services.Tag import create_tag
 from services.Task import create_task
 from DB.session import database
+from config import PRIORITIES
 
 local = database.get_session()
 db = local()
@@ -43,7 +44,7 @@ def seed():
     tasks = [
         Task(
             title="Mop floor",
-            priority=Priority.LOW,
+            priority=PRIORITIES[0],
             last_completed="2025-01-21",
             user=user1,
             tags=[kitchen],

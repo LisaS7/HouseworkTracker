@@ -57,7 +57,7 @@ def update_task(db: Session, id: int, task: TaskUpdate) -> Task:
     existing_task = get_task_by_id(db, id)
     logger.info(f"Updating old Task: {existing_task}")
 
-    for key, value in task.items():
+    for key, value in task.model_dump(exclude_unset=True).items():
         setattr(existing_task, key, value)
 
     db.commit()

@@ -1,9 +1,8 @@
 from datetime import date
 from typing import List
 from pydantic import BaseModel, Field, EmailStr
-from models.Task import Priority
 
-from config import MAX_TAG_LENGTH, MAX_TITLE_LENGTH
+from config import MAX_TAG_LENGTH, MAX_TITLE_LENGTH, PRIORITIES
 
 # ----------- TAGS -----------
 
@@ -47,7 +46,9 @@ class TaskModel(BaseModel):
         max_length=255,
         description=f"Title of the task (3-{MAX_TITLE_LENGTH} characters)",
     )
-    priority: Priority
+    priority: str = Field(
+        PRIORITIES[0], description=f"The task priority. Values={PRIORITIES}"
+    )
     last_completed: date | None = Field(
         None, description="Date the task was last completed"
     )
@@ -64,7 +65,7 @@ class TaskCreate(BaseModel):
         max_length=255,
         description=f"Title of the task (3-{MAX_TITLE_LENGTH} characters)",
     )
-    priority: Priority | None = Priority.LOW
+    priority: str | None = PRIORITIES[0]
     last_completed: date | None = None
     repeat_interval: int | None = None
     user_id: int
@@ -78,11 +79,15 @@ class TaskUpdate(BaseModel):
         max_length=255,
         description=f"Title of the task (3-{MAX_TITLE_LENGTH} characters)",
     )
-    priority: Priority | None
+    priority: str | None
     last_completed: date | None = None
     repeat_interval: int | None = None
-    user_id: int
+    user_id: int | None = None
     tags: List[TagModel] | None = None
+
+
+class PriorityUpdate(BaseModel):
+    priority: str
 
 
 # ----------- USERS -----------

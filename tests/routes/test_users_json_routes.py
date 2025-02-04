@@ -2,7 +2,6 @@ import pytest
 from unittest.mock import MagicMock
 from fastapi.testclient import TestClient
 from main import app
-from models.User import User
 
 client = TestClient(app)
 
