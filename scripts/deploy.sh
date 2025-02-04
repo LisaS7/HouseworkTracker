@@ -1,4 +1,4 @@
-git pull origin main
+git pull origin main || { echo "error"; exit 1; }
 docker stop houseworktracker || true
 docker rm houseworktracker || true
 docker build -t houseworktracker:latest .
