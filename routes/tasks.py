@@ -14,9 +14,8 @@ async def all_users(request: Request, db: Session = Depends(get_db)):
     data = get_all_tasks(db)
 
     logger.info(f"{request.method} {request.url}")
-
     return templates.TemplateResponse(
-        "tasks.jinja", context={"request": request, "tasks": data}
+        "tasks.html", context={"request": request, "tasks": data}
     )
 
 

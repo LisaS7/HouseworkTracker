@@ -3,6 +3,11 @@ function allowDrop(ev) {
   ev.preventDefault();
 }
 
+// Start dragging a task
+function drag(ev) {
+  ev.dataTransfer.setData("taskId", ev.target.getAttribute("data-task-id"));
+}
+
 // Handle the drop event
 function drop(ev) {
   ev.preventDefault();

@@ -28,4 +28,4 @@ seed.seed()
 
 @app.get("/")
 def home(request: Request):
-    return templates.TemplateResponse(request=request, name="home.jinja")
+    return templates.TemplateResponse(request=request, name="home.html")
