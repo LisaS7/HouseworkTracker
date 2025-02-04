@@ -1,4 +1,4 @@
-<div class="card mb-3" draggable=true>
+<div id="task-{{task.id}}" class="card mb-3" draggable=true ondragstart="drag(event)" data-task-id={{task.id}}>
     <div class="card-body">
       <h5 class="card-title">{{ task.title }}</h5>
       <p class="card-text"><strong>Last Completed:</strong> {{ task.last_completed }}</p>
@@ -13,3 +13,9 @@
       </ul>
     </div>
   </div>
+  <script>
+    // Start dragging a task
+function drag(ev) {
+  ev.dataTransfer.setData("taskId", ev.target.getAttribute("data-task-id"));
+}
+  </script>
