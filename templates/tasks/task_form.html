@@ -1,0 +1,93 @@
+{% extends "base.html" %} {% block title %}Create Task - Housework Tracker{%
+endblock %} {% block content %}
+<form action="/tasks/" method="post">
+  <!-- Task Title -->
+  <div class="mb-3">
+    <label for="title" class="form-label">Title</label>
+    <input
+      type="text"
+      id="title"
+      name="title"
+      class="form-control"
+      maxlength="255"
+      required
+    />
+  </div>
+
+  <!-- Priority -->
+  <div class="mb-3">
+    <label for="priority" class="form-label">Priority</label>
+    <select id="priority" name="priority" class="form-control">
+      {% for priority in priorities %}
+      <option value="{{priority}}">{{priority|title}}</option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <!-- Last Completed Date -->
+  <div class="mb-3">
+    <label for="last_completed" class="form-label">Last Completed</label>
+    <input
+      type="date"
+      id="last_completed"
+      name="last_completed"
+      class="form-control"
+    />
+  </div>
+
+  <!-- Repeat Interval -->
+  <div class="mb-3">
+    <label for="repeat_interval" class="form-label"
+      >Repeat Interval (Days)</label
+    >
+    <input
+      type="number"
+      id="repeat_interval"
+      name="repeat_interval"
+      class="form-control"
+      min="0"
+      value="0"
+    />
+  </div>
+
+  <!-- User -->
+  <div class="mb-3">
+    <label for="user_id" class="form-label">Assign to User</label>
+    <select id="user" name="user" class="form-control">
+      {% for user in users %}
+      <option value="{{user.id}}">{{user.name}}</option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <!-- Tags -->
+  <div class="mb-3">
+    <label for="tags">Tags</label>
+    <select id="tags" class="form-control" multiple></select>
+  </div>
+
+  <!-- Submit Button -->
+  <button type="submit" class="btn btn-primary">Create</button>
+</form>
+{% endblock %} {% block scripts %}
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css"
+/>
+<script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+<script>
+  console.log("running");
+  document.addEventListener("DOMContentLoaded", function () {
+    new Choices("#tags", {
+      removeItemButton: true, // Adds an "X" button to remove tags
+      removeItems: true,
+      duplicateItemsAllowed: false,
+      placeholderValue: "Add a tag",
+      addItems: true,
+      addChoices: true,
+      addItemText: true,
+      allowHTML: false,
+    });
+  });
+</script>
+{% endblock %}

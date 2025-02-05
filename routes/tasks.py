@@ -1,9 +1,10 @@
 from fastapi import APIRouter, Request, Depends
 from fastapi.responses import RedirectResponse
 from sqlalchemy.orm import Session
-from config import templates, logger
+from config import templates, logger, PRIORITIES
 from DB.session import get_db
 from services.Task import get_all_tasks, get_task_by_id, update_task
+from services.User import get_all_users
 from services.schemas import PriorityUpdate, TaskUpdate
 
 
@@ -17,6 +18,21 @@ async def get_tasks(request: Request, db: Session = Depends(get_db)):
     logger.info(f"{request.method} {request.url}")
     return templates.TemplateResponse(
         "/tasks/tasks.html", context={"request": request, "tasks": data}
+    )
+
+
+@router.post("/")
+async def create_task():
+    pass
+
+
+@router.get("/create")
+async def create_task_form(request: Request, db: Session = Depends(get_db)):
+    users = get_all_users(db)
+    logger.info(f"{request.method} {request.url}")
+    return templates.TemplateResponse(
+        "/tasks/task_form.html",
+        context={"request": request, "priorities": PRIORITIES, "users": users},
     )
 
 
