@@ -75,19 +75,35 @@ endblock %} {% block content %}
   href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css"
 />
 <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+
 <script>
-  console.log("running");
   document.addEventListener("DOMContentLoaded", function () {
-    new Choices("#tags", {
-      removeItemButton: true, // Adds an "X" button to remove tags
-      removeItems: true,
-      duplicateItemsAllowed: false,
-      placeholderValue: "Add a tag",
-      addItems: true,
-      addChoices: true,
-      addItemText: true,
-      allowHTML: false,
-    });
+    fetch("/tags/", {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((tags) => {
+        const choices = tags.map((tag) => ({
+          value: tag.name,
+          label: tag.name,
+        }));
+
+        new Choices("#tags", {
+          removeItemButton: true, // Adds an "X" button to remove tags
+          removeItems: true,
+          duplicateItemsAllowed: false,
+          placeholderValue: "Add a tag",
+          addItems: true,
+          addChoices: true,
+          addItemText: true,
+          allowHTML: false,
+          choices: choices,
+        });
+      });
   });
 </script>
 {% endblock %}
