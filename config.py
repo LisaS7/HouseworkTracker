@@ -12,13 +12,11 @@ env_path = Path(".") / ".env"
 load_dotenv(dotenv_path=env_path)
 
 TESTING = os.getenv("TESTING")
-IN_DOCKER = os.getenv("IN_DOCKER")
 
 
 # ----- PROJECT ------
 PROJECT_NAME = "Housework Tracker"
 PROJECT_VERSION = "1.0.0"
-platform = sys.platform
 
 # ----- CONFIGS ------
 MAX_TITLE_LENGTH = 255
@@ -35,8 +33,17 @@ class DatabaseConfig:
     password: str
     port: str
     db_name: str
-    linux_ip: str
-    docker_host: str
+    server: str = None
+
+    def __post_init__(self):
+        IN_DOCKER = os.getenv("IN_DOCKER")
+        if IN_DOCKER:
+            if sys.platform.startswith("linux"):
+                self.server = os.getenv("LINUX_IP")
+            else:
+                self.server = os.getenv("DOCKER_HOST")
+        else:
+            self.server = "localhost"
 
 
 database_config = DatabaseConfig(
@@ -44,8 +51,6 @@ database_config = DatabaseConfig(
     password=os.getenv("POSTGRES_PASSWORD"),
     port=os.getenv("POSTGRES_PORT", 5432),
     db_name=os.getenv("POSTGRES_DB", "housework"),
-    linux_ip=os.getenv("LINUX_IP"),
-    docker_host=os.getenv("DOCKER_HOST"),
 )
 
 

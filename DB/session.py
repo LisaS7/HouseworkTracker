@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, sessionmaker, declarative_base
 from sqlalchemy.exc import OperationalError
-from config import TESTING, ECHO_LOGS, database_config, IN_DOCKER, platform, logger
+from config import TESTING, ECHO_LOGS, database_config, logger
 from typing import Generator
 
 
@@ -13,20 +13,7 @@ class Database:
     POSTGRES_PASSWORD = database_config.password
     POSTGRES_PORT: str = database_config.port
     POSTGRES_DB: str = database_config.db_name
-
-    def __init__(self, in_docker: int = False, platform: str = "linux"):
-        self.in_docker = in_docker
-        self.platform = platform
-        self.POSTGRES_SERVER = self.get_host()
-
-    def get_host(self) -> str:
-        if self.in_docker:
-            if self.platform.startswith("linux"):
-                return database_config.linux_ip
-            else:
-                return database_config.docker_host
-        else:
-            return "localhost"
+    POSTGRES_SERVER: str = database_config.server
 
     def set_engine(self, testing: bool) -> sessionmaker:
         if testing:
@@ -50,7 +37,7 @@ class Database:
         return sessionmaker(autocommit=False, autoflush=False, bind=self.engine)
 
 
-database = Database(IN_DOCKER, platform)
+database = Database()
 database.set_engine(TESTING)
 
 
