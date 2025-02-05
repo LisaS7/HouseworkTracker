@@ -1,9 +1,14 @@
-from fastapi import APIRouter, Request, Depends
+from fastapi import APIRouter, Request, Depends, HTTPException
 from fastapi.responses import RedirectResponse
 from sqlalchemy.orm import Session
 from config import templates, logger, PRIORITIES
 from DB.session import get_db
-from services.Task import get_all_tasks, get_task_by_id, update_task
+from services.Task import (
+    get_all_tasks,
+    get_task_by_id,
+    update_task,
+    TaskNotFoundException,
+)
 from services.User import get_all_users
 from services.schemas import PriorityUpdate, TaskUpdate
 
@@ -23,6 +28,16 @@ async def get_tasks(request: Request, db: Session = Depends(get_db)):
 
 @router.post("/")
 async def create_task():
+    # get request body
+
+    # add any tags that don't already exist
+
+    # validate with pydantic
+
+    # call services function
+
+    # redirect to /tasks
+
     pass
 
 
@@ -38,7 +53,10 @@ async def create_task_form(request: Request, db: Session = Depends(get_db)):
 
 @router.get("/{task_id}")
 async def get_task(task_id: int, request: Request, db: Session = Depends(get_db)):
-    task = get_task_by_id(db, task_id)
+    try:
+        task = get_task_by_id(db, task_id)
+    except TaskNotFoundException as e:
+        raise HTTPException(status_code=404, detail=str(e))
 
     logger.info(f"{request.method} {request.url}")
     logger.info(f"Returned {task}")

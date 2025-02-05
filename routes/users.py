@@ -16,3 +16,7 @@ async def all_users(request: Request, db: Session = Depends(get_db)):
     return templates.TemplateResponse(
         "/users/users.html", context={"request": request, "users": data}
     )
+
+
+# TODO: get individual user
+# error handling for user not found
