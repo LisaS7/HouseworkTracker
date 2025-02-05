@@ -48,13 +48,15 @@ class Task(Database.Base):
                 message = f"{value} is not a valid integer"
                 logger.error(message)
                 raise ValueError(message)
+        else:
+            int_value = value
 
         if int_value > 0:
             return int_value
-        else:
-            message = f"Repeat interval cannot be a negative number ({value})"
-            logger.error(message)
-            raise ValueError(message)
+
+        message = f"Repeat interval cannot be a negative number ({value})"
+        logger.error(message)
+        raise ValueError(message)
 
     @validates("priority")
     def validate_priority(self, _, value):
