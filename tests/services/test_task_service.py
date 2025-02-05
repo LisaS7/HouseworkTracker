@@ -2,6 +2,7 @@ import pytest
 
 from models.Task import Task
 from models.Tag import Tag
+from services.schemas import TaskUpdate
 from services.Task import *
 
 from datetime import date, timedelta
@@ -73,7 +74,8 @@ def test_create_task(test_users, db):
 
 
 def test_update_task(test_tasks, db):
-    update_task(db, 1, {"title": "Laundry"})
+    data = TaskUpdate(title="Laundry")
+    update_task(db, 1, data)
     retrieved_task = db.query(Task).filter(Task.id == 1).first()
     assert retrieved_task.title == "Laundry"
 
@@ -134,8 +136,10 @@ def test_remove_tag_from_task(test_tasks, test_tags, db):
 def test_get_overdue_tasks(test_tasks, db):
     test_tasks[0].repeat_interval = 1
     test_tasks[1].repeat_interval = 1
+    test_tasks[2].repeat_interval = 1000  # make this one not included
     db.commit()
     tasks = get_all_overdue_tasks(db)
+
     assert len(tasks) == 2
     for task in tasks:
         assert task.next_due < date.today()

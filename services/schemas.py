@@ -79,7 +79,7 @@ class TaskUpdate(BaseModel):
         max_length=255,
         description=f"Title of the task (3-{MAX_TITLE_LENGTH} characters)",
     )
-    priority: str | None
+    priority: str | None = PRIORITIES[0]
     last_completed: date | None = None
     repeat_interval: int | None = None
     user_id: int | None = None

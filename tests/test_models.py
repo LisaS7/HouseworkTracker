@@ -2,7 +2,7 @@ import pytest
 from datetime import date
 from sqlalchemy.exc import IntegrityError
 
-from models.Task import Task, Priority
+from models.Task import Task
 from models.Tag import Tag
 from models.User import User
 from config import MAX_TITLE_LENGTH, MAX_TAG_LENGTH, MAX_USER_NAME_LENGTH
@@ -62,7 +62,7 @@ def test_default_priority(test_user, db):
     db.refresh(task)
     retrieved_task = db.query(Task).filter_by(title="Test Priority").first()
 
-    assert retrieved_task.priority == Priority.LOW
+    assert retrieved_task.priority == "LOW"
 
 
 def test_invalid_priority(test_user):
