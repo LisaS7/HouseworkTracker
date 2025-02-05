@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from models.User import User
 from typing import List
-from services.schemas import UserCreate, UserUpdate
+from services.schemas import UserCreate, UserUpdate, UserModel
 from config import logger
 
 
@@ -13,18 +13,18 @@ class UserNotFoundException(Exception):
         super().__init__(self.message)
 
 
-def get_all_users(db: Session) -> List[User]:
+def get_all_users(db: Session) -> List[UserModel]:
     return db.query(User).all()
 
 
-def get_user_by_id(db: Session, id: int) -> User:
+def get_user_by_id(db: Session, id: int) -> UserModel:
     user = db.query(User).filter(User.id == id).first()
     if not user:
         raise UserNotFoundException(id)
     return user
 
 
-def create_user(db: Session, user: UserCreate) -> User:
+def create_user(db: Session, user: UserCreate) -> UserModel:
     db.add(user)
     db.commit()
     db.refresh(user)
@@ -32,7 +32,7 @@ def create_user(db: Session, user: UserCreate) -> User:
     return user
 
 
-def update_user(db: Session, id: int, user: UserUpdate) -> User:
+def update_user(db: Session, id: int, user: UserUpdate) -> UserModel:
     existing_user = get_user_by_id(db, id)
     logger.info(f"Updating old User: {existing_user}")
 

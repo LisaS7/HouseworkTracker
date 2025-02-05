@@ -2,7 +2,7 @@ from sqlalchemy.orm import Session
 from typing import List
 
 from models.Tag import Tag
-from services.schemas import TagCreate, TagUpdate
+from services.schemas import TagCreate, TagUpdate, TagModel
 from config import logger
 
 
@@ -14,18 +14,18 @@ class TagNotFoundException(Exception):
         super().__init__(self.message)
 
 
-def get_all_tags(db: Session) -> List[Tag]:
+def get_all_tags(db: Session) -> List[TagModel]:
     return db.query(Tag).all()
 
 
-def get_tag_by_id(db: Session, id: int) -> Tag:
+def get_tag_by_id(db: Session, id: int) -> TagModel:
     tag = db.query(Tag).filter(Tag.id == id).first()
     if not tag:
         raise TagNotFoundException(id)
     return tag
 
 
-def create_tag(db: Session, tag: TagCreate) -> Tag:
+def create_tag(db: Session, tag: TagCreate) -> TagModel:
     db.add(tag)
     db.commit()
     db.refresh(tag)
@@ -33,7 +33,7 @@ def create_tag(db: Session, tag: TagCreate) -> Tag:
     return tag
 
 
-def update_tag(db: Session, id: int, tag: TagUpdate) -> Tag:
+def update_tag(db: Session, id: int, tag: TagUpdate) -> TagModel:
 
     existing_tag = get_tag_by_id(db, id)
     logger.info(f"Updating old Tag: {existing_tag}")

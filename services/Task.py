@@ -3,8 +3,7 @@ from typing import List
 from sqlalchemy.orm import Session
 
 from models.Task import Task
-from models.Tag import Tag
-from services.schemas import TaskCreate, TaskUpdate
+from services.schemas import TaskCreate, TaskUpdate, TaskModel, TagModel
 from config import logger
 
 TODAY = date.today()
@@ -18,34 +17,34 @@ class TaskNotFoundException(Exception):
         super().__init__(self.message)
 
 
-def get_all_tasks(db: Session) -> List[Task]:
+def get_all_tasks(db: Session) -> List[TaskModel]:
     return db.query(Task).all()
 
 
-def get_all_incomplete_tasks(db: Session) -> List[Task]:
+def get_all_incomplete_tasks(db: Session) -> List[TaskModel]:
     return db.query(Task).filter(Task.complete == False).all()
 
 
-def get_all_overdue_tasks(db: Session) -> List[Task]:
+def get_all_overdue_tasks(db: Session) -> List[TaskModel]:
     return db.query(Task).filter(Task.next_due < TODAY).all()
 
 
-def get_todays_tasks(db: Session) -> List[Task]:
+def get_todays_tasks(db: Session) -> List[TaskModel]:
     return db.query(Task).filter(Task.next_due == TODAY).all()
 
 
-def get_tasks_by_user(db: Session, id: int) -> List[Task]:
+def get_tasks_by_user(db: Session, id: int) -> List[TaskModel]:
     return db.query(Task).filter(Task.user_id == id).all()
 
 
-def get_task_by_id(db: Session, id: int) -> Task:
+def get_task_by_id(db: Session, id: int) -> TaskModel:
     task = db.query(Task).filter(Task.id == id).first()
     if not task:
         raise TaskNotFoundException(id)
     return task
 
 
-def create_task(db: Session, task: TaskCreate) -> Task:
+def create_task(db: Session, task: TaskCreate) -> TaskModel:
     db.add(task)
     db.commit()
     db.refresh(task)
@@ -53,7 +52,7 @@ def create_task(db: Session, task: TaskCreate) -> Task:
     return task
 
 
-def update_task(db: Session, id: int, task: TaskUpdate) -> Task:
+def update_task(db: Session, id: int, task: TaskUpdate) -> TaskModel:
     existing_task = get_task_by_id(db, id)
     logger.info(f"Updating old Task: {existing_task}")
 
@@ -74,7 +73,7 @@ def delete_task(db: Session, id: int):
     db.commit()
 
 
-def add_tags_to_task(db: Session, task: Task, tags: List[Tag]) -> Task:
+def add_tags_to_task(db: Session, task: Task, tags: List[TagModel]) -> Task:
     logger.info(f"Adding tags {[str(tag) for tag in tags]}")
     logger.info(f"to task {task}")
     for tag in tags:
@@ -86,12 +85,12 @@ def add_tags_to_task(db: Session, task: Task, tags: List[Tag]) -> Task:
     return task
 
 
-def get_tags_by_task(db: Session, id: int) -> List[Tag] | None:
+def get_tags_by_task(db: Session, id: int) -> List[TagModel] | None:
     task = get_task_by_id(db, id)
     return task.tags if task.tags else None
 
 
-def get_tasks_by_tag(db: Session, tag: Tag) -> List[Task] | None:
+def get_tasks_by_tag(db: Session, tag: TagModel) -> List[Task] | None:
     db.refresh(tag)  # ensures the relationship is loaded
     return tag.tasks if tag.tasks else None
 
