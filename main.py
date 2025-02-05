@@ -1,5 +1,6 @@
 from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
+from starlette.exceptions import HTTPException
 
 from DB.session import database
 from config import templates, PROJECT_NAME, PROJECT_VERSION, TESTING
@@ -22,6 +23,15 @@ if not TESTING:
     database.set_engine(testing=TESTING)
 
 
+@app.exception_handler(HTTPException)
+async def custom_404_error(request: Request, exc: HTTPException):
+    if exc.status_code == 404:
+        return templates.TemplateResponse("404.html", {"request": request})
+    else:
+        # For other exceptions
+        raise exc
+
+
 @app.get("/")
 def home(request: Request):
-    return templates.TemplateResponse(request=request, name="home.html")
+    return templates.TemplateResponse(request=request, name="/home/home.html")
