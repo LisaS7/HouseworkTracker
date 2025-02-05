@@ -1,4 +1,4 @@
-import os, sys
+import os
 import logging
 from dataclasses import dataclass
 from datetime import date
@@ -35,6 +35,7 @@ class DatabaseConfig:
     db_name: str
     server: str = None
 
+    # We need to use a different IP to connect to the db if running in a docker container
     def __post_init__(self):
         IN_DOCKER = os.getenv("IN_DOCKER")
         if IN_DOCKER:
