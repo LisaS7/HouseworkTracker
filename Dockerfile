@@ -18,7 +18,7 @@ EXPOSE 8000
 
 # To determine which db connection string to use
 ENV IN_DOCKER=1
-ENV DOCKER_HOST=host.docker.internal
+ENV DOCKER_HOST=172.17.0.1
 
 # Run FastAPI using Uvicorn
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
