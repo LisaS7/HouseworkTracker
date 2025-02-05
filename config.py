@@ -38,10 +38,7 @@ class DatabaseConfig:
     def __post_init__(self):
         IN_DOCKER = os.getenv("IN_DOCKER")
         if IN_DOCKER:
-            if sys.platform.startswith("linux"):
-                self.server = os.getenv("LINUX_IP")
-            else:
-                self.server = os.getenv("DOCKER_HOST")
+            self.server = os.getenv("DOCKER_HOST")
         else:
             self.server = "localhost"
 
