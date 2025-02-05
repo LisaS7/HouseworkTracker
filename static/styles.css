@@ -24,8 +24,31 @@ body {
   background-color: aliceblue;
 }
 
-.card {
-  box-shadow: 4px 4px 1px rgba(0, 0, 0, 0.8) !important;
+.btn {
+  background-color: #f1f1f1;
+  border: 1px solid #333;
+  padding: 12px 24px;
+  border-radius: 0px;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2),
+    -5px -5px 10px rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+}
+
+.btn:hover {
+  background-color: var(--bold-blue);
+  color: #fff;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5),
+    -5px -5px 10px rgba(255, 255, 255, 0.3); /* Stronger shadow effect */
+  transform: scale(1.05);
+}
+
+.btn:active {
+  background-color: #222;
+  border-color: #222;
+  box-shadow: inset 5px 5px 10px rgba(0, 0, 0, 0.5),
+    inset -5px -5px 10px rgba(255, 255, 255, 0.3); /* Inset shadow when clicked */
+  transform: scale(0.98);
 }
 
 .border {
@@ -38,6 +61,10 @@ body {
 
 .border-bottom {
   border-bottom: 3px solid black !important;
+}
+
+.border-light {
+  border: 1px solid black !important;
 }
 
 /* ==========================
@@ -67,4 +94,29 @@ body {
 .badge.bg-success {
   background-color: var(--turquoise) !important;
   box-shadow: 4px 4px 1px rgba(0, 0, 0, 0.8);
+}
+
+/* ==========================
+   Media
+   ========================== */
+
+@media (max-width: 480px) {
+  #task-container {
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    flex-grow: 1;
+  }
+
+  .card {
+    font-size: 0.8rem;
+    width: 100% !important;
+    font-size: 1rem;
+    padding: 15px;
+  }
+
+  .col-4 {
+    width: 90% !important;
+    margin-bottom: 20px;
+  }
 }
