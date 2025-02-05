@@ -20,7 +20,7 @@ function drop(ev) {
   }
 
   // Send an API request to update the task priority in the database
-  fetch(`/tasks/update-priority/${taskId}`, {
+  fetch(`/tasks/${taskId}/priority`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
