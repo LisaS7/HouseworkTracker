@@ -26,7 +26,9 @@ if not TESTING:
 @app.exception_handler(HTTPException)
 async def custom_404_error(request: Request, exc: HTTPException):
     if exc.status_code == 404:
-        return templates.TemplateResponse("404.html", {"request": request})
+        return templates.TemplateResponse(
+            "404.html", {"request": request, "detail": exc.detail}
+        )
     else:
         # For other exceptions
         raise exc
