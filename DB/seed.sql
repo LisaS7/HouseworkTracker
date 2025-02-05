@@ -43,4 +43,4 @@ VALUES
     ((SELECT id FROM tasks WHERE title = 'Clean and tidy dining table'), (SELECT id FROM tags WHERE name = 'Living Room')),
     ((SELECT id FROM tasks WHERE title = 'Empty main bin'), (SELECT id FROM tags WHERE name = 'Kitchen')),
     ((SELECT id FROM tasks WHERE title = 'Empty plastic/cans recycling'), (SELECT id FROM tags WHERE name = 'Kitchen')),
-    ((SELECT id FROM tasks WHERE title = 'Clean sink'), (SELECT id FROM tags WHERE name = 'Kitchen'));
+
