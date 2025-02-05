@@ -27,7 +27,7 @@ async def get_task(task_id: int, request: Request, db: Session = Depends(get_db)
     logger.info(f"{request.method} {request.url}")
     logger.info(f"Returned {task}")
     return templates.TemplateResponse(
-        "/tasks/task.html", context={"request": request, "task": task}
+        "/tasks/task_detail.html", context={"request": request, "task": task}
     )
 
 
@@ -47,7 +47,7 @@ async def edit_task(task_id: int, request: Request, db: Session = Depends(get_db
     logger.info(f"{request.method} {request.url}")
     logger.info(f"Returned {task}")
     return templates.TemplateResponse(
-        "/tasks/task.html", context={"request": request, "task": task}
+        "/tasks/task_detail.html", context={"request": request, "task": task}
     )
 
 
