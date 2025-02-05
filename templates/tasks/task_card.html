@@ -6,18 +6,19 @@
   data-task-id="{{task.id}}"
 >
   <div class="card-body">
-    <h5 class="card-title">{{ task.title }}</h5>
-    <p class="card-text">
-      <strong>Last Completed:</strong> {{ task.last_completed }}
-    </p>
-    <p class="card-text"><strong>Next Due:</strong> {{ task.next_due }}</p>
-    <p class="card-text">
-      <strong>Repeat Interval:</strong> {{ task.repeat_interval }} days
-    </p>
-    <p class="card-text">
+    <h5 class="card-title mb-4">
+      <button
+        class="btn"
+        onclick="window.location.href='{{ url_for('get_task', task_id=task.id) }}'"
+      >
+        {{ task.title }}
+      </button>
+    </h5>
+    <p class="card-text mb-0"><strong>Next Due:</strong> {{ task.next_due }}</p>
+    <p class="card-text mb-2">
       <strong>Assigned to:</strong> {{ task.user.username }}
     </p>
-    <h6>Tags:</h6>
+    <h6 class="mb-1">Tags:</h6>
     <ul>
       {% for tag in task.tags %}
       <li>{{ tag.name }}</li>

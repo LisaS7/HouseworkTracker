@@ -1,0 +1,59 @@
+{% extends "base.html" %} {% block title %}Tasks - Housework Tracker{% endblock
+%} {% block content %}
+<h1>Tasks</h1>
+<div class="container">
+  <div id="task-container" class="row mb-5">
+    <div class="border-light p-3">
+      <h3>No Priority</h3>
+
+      {% for task in tasks if not task.priority %}
+      <div
+        id="task-{{task.id}}"
+        class="card m-3 col-2 text-center"
+        draggable="true"
+        ondragstart="drag(event)"
+        data-task-id="{{task.id}}"
+      >
+        {{task.title}}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  <div class="row">
+    <div
+      id="LOW"
+      class="col-4 border-bottom"
+      ondrop="drop(event)"
+      ondragover="allowDrop(event)"
+    >
+      <h2>High Priority</h2>
+      {% for task in tasks if task.priority == 'HIGH' %} {% include
+      'tasks/task_card.html' %} {% endfor %}
+    </div>
+
+    <div
+      id="MEDIUM"
+      class="col-4 border-bottom"
+      ondrop="drop(event)"
+      ondragover="allowDrop(event)"
+    >
+      <h2>Medium Priority</h2>
+      {% for task in tasks if task.priority == 'MEDIUM' %} {% include
+      'tasks/task_card.html' %} {% endfor %}
+    </div>
+
+    <div
+      id="HIGH"
+      class="col-4 border-bottom"
+      ondrop="drop(event)"
+      ondragover="allowDrop(event)"
+    >
+      <h2>Low Priority</h2>
+      {% for task in tasks if task.priority == 'LOW' %} {% include
+      'tasks/task_card.html' %} {% endfor %}
+    </div>
+  </div>
+</div>
+{% block scripts %}
+<script src="{{ url_for('static', path='js/drag-drop.js') }}" />
+{% endblock %} {% endblock %}

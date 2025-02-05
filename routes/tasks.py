@@ -1,8 +1,9 @@
 from fastapi import APIRouter, Request, Depends
+from fastapi.responses import RedirectResponse
 from sqlalchemy.orm import Session
 from config import templates, logger
 from DB.session import get_db
-from services.Task import get_all_tasks, update_task
+from services.Task import get_all_tasks, get_task_by_id, update_task
 from services.schemas import PriorityUpdate, TaskUpdate
 
 
@@ -10,19 +11,50 @@ router = APIRouter()
 
 
 @router.get("/")
-async def all_users(request: Request, db: Session = Depends(get_db)):
+async def get_tasks(request: Request, db: Session = Depends(get_db)):
     data = get_all_tasks(db)
 
     logger.info(f"{request.method} {request.url}")
     return templates.TemplateResponse(
-        "tasks.html", context={"request": request, "tasks": data}
+        "/tasks/tasks.html", context={"request": request, "tasks": data}
     )
 
 
-@router.post("/update-priority/{task_id}")
+@router.get("/{task_id}")
+async def get_task(task_id: int, request: Request, db: Session = Depends(get_db)):
+    task = get_task_by_id(db, task_id)
+
+    logger.info(f"{request.method} {request.url}")
+    logger.info(f"Returned {task}")
+    return templates.TemplateResponse(
+        "/tasks/task.html", context={"request": request, "task": task}
+    )
+
+
+@router.patch("/{task_id}/priority")
 def update_task_priority(
     task_id: int, data: PriorityUpdate, db: Session = Depends(get_db)
 ):
     update_task(db, task_id, TaskUpdate(**data.model_dump()))
 
-    return {"message": "Update successful"}
+    return {"message": "Priority update successful"}
+
+
+@router.put("/{task_id}")
+async def edit_task(task_id: int, request: Request, db: Session = Depends(get_db)):
+    task = get_task_by_id(db, task_id)
+
+    logger.info(f"{request.method} {request.url}")
+    logger.info(f"Returned {task}")
+    return templates.TemplateResponse(
+        "/tasks/task.html", context={"request": request, "task": task}
+    )
+
+
+@router.delete("/{task_id}")
+async def delete_task(task_id: int, request: Request, db: Session = Depends(get_db)):
+    task = get_task_by_id(db, task_id)
+
+    logger.info(f"{request.method} {request.url}")
+    logger.info(f"Task to delete: {task}")
+    return RedirectResponse(url="/tasks", status_code=204)
