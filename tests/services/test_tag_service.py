@@ -37,11 +37,22 @@ def test_tag_not_found(test_tags, db):
         get_tag_by_id(db, 46)
 
 
+def test_get_tag_by_name(test_tags, db):
+    tag = get_tag_by_name(db, "Tag2")
+    assert tag.id == 2
+
+
+def test_get_tag_by_name_not_found(test_tags, db):
+    tag = get_tag_by_name(db, "Tag22222")
+    assert not tag
+
+
 def test_create_tag(db):
     tag = Tag(name="Tag3")
     created_tag = create_tag(db, tag)
     retrieved_tag = db.query(Tag).filter(Tag.id == 1).first()
-    assert retrieved_tag == created_tag
+    assert retrieved_tag.id == created_tag.id
+    assert retrieved_tag.name == created_tag.name
 
 
 def test_update_tag(test_tags, db):

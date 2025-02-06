@@ -67,10 +67,12 @@ def test_task_not_found(test_tasks, db):
 
 def test_create_task(test_users, db):
     user = test_users[0]
-    task = Task(title="Buy cheese", last_completed="2025-01-30", user=user)
+    task = Task(title="Buy cheese", last_completed="2025-01-30", user_id=user.id)
     created_task = create_task(db, task)
     retrieved_task = db.query(Task).filter_by(title="Buy cheese").first()
-    assert retrieved_task == created_task
+    assert retrieved_task.title == created_task.title
+    assert retrieved_task.last_completed == created_task.last_completed
+    assert retrieved_task.user_id == created_task.user_id
 
 
 def test_update_task(test_tasks, db):
