@@ -25,11 +25,12 @@ def get_user_by_id(db: Session, id: int) -> UserModel:
 
 
 def create_user(db: Session, user: UserCreate) -> UserModel:
-    db.add(user)
+    db_user = User(name=user.name)
+    db.add(db_user)
     db.commit()
-    db.refresh(user)
-    logger.info(f"Created {user}")
-    return user
+    db.refresh(db_user)
+    logger.info(f"Created {db_user}")
+    return db_user
 
 
 def update_user(db: Session, id: int, user: UserUpdate) -> UserModel:
