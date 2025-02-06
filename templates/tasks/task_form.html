@@ -54,7 +54,7 @@ endblock %} {% block content %}
     <!-- User -->
     <div class="mb-3">
       <label for="user_id" class="form-label">Assign to User</label>
-      <select id="user" name="user" class="form-control">
+      <select id="user" name="user_id" class="form-control">
         {% for user in users %}
         <option value="{{user.id}}">{{user.name}}</option>
         {% endfor %}
@@ -64,7 +64,7 @@ endblock %} {% block content %}
     <!-- Tags -->
     <div class="mb-3">
       <label for="tags">Tags</label>
-      <select id="tags" class="form-control" multiple></select>
+      <select id="tags" name="tags" class="form-control" multiple></select>
     </div>
 
     <!-- Submit Button -->
@@ -80,35 +80,6 @@ endblock %} {% block content %}
   href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css"
 />
 <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
-
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    fetch("/tags/", {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => response.json())
-      .then((tags) => {
-        const choices = tags.map((tag) => ({
-          value: tag.name,
-          label: tag.name,
-        }));
-
-        new Choices("#tags", {
-          removeItemButton: true, // Adds an "X" button to remove tags
-          removeItems: true,
-          duplicateItemsAllowed: false,
-          placeholderValue: "Add a tag",
-          addItems: true,
-          addChoices: true,
-          addItemText: true,
-          allowHTML: false,
-          choices: choices,
-        });
-      });
-  });
-</script>
+<script src="{{ url_for('static', path='js/choices.js') }}"></script>
+<script src="{{ url_for('static', path='js/submit-form.js') }}"></script>
 {% endblock %}
