@@ -1,11 +1,35 @@
 {% extends "base.html" %} {% block title %}Tags - Housework Tracker{% endblock
 %} {% block content %}
 
-<h1 class="mb-4">Tags</h1>
-
+<div class="d-flex justify-content-between align-items-center">
+  <h1>Tags</h1>
+  <form>
+    <div class="mb-4">
+      <label for="name" class="form-label">New Tag</label>
+      <div class="d-flex mb-4 align-items-center">
+        <input
+          type="text"
+          id="name"
+          name="name"
+          class="form-control"
+          maxlength="50"
+          required
+        />
+        <button type="submit" class="btn btn-small mx-4">+</button>
+      </div>
+    </div>
+  </form>
+</div>
 {% for tag in tags %}
 <div class="tag-container p-3 mb-5">
-  <h2>{{ tag.name }}</h2>
+  <div class="d-flex justify-content-between align-items-center">
+    <h2>{{ tag.name }}</h2>
+    {% if not tag.tasks %}
+    <button class="btn btn-danger" onclick="delete_item('tags',{{ tag.id }})">
+      Delete
+    </button>
+    {% endif %}
+  </div>
   {% if tag.tasks %}
   <div class="task-list">
     {% for task in tag.tasks %}
@@ -21,4 +45,7 @@
   <p>No tasks assigned to this tag.</p>
   {% endif %}
 </div>
-{% endfor %} {% endblock %}
+{% endfor %} {% endblock %} {% block scripts %}
+<script src="{{ url_for('static', path='js/submit-tags.js') }}"></script>
+<script src="{{ url_for('static', path='js/delete.js') }}"></script>
+{% endblock %}

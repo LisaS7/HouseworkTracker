@@ -25,12 +25,22 @@ def get_tag_by_id(db: Session, id: int) -> TagModel:
     return tag
 
 
-def create_tag(db: Session, tag: TagCreate) -> TagModel:
-    db.add(tag)
-    db.commit()
-    db.refresh(tag)
-    logger.info(f"Created {tag}")
+def get_tag_by_name(db: Session, name: str) -> TagModel:
+    # ilike makes the query case insensitive! cool!
+    tag = db.query(Tag).filter(Tag.name.ilike(name)).first()
+    if not tag:
+        return None
     return tag
+
+
+def create_tag(db: Session, tag: TagCreate) -> TagModel:
+    # we need to convert pydantic model to sqlalchemy model before adding to db
+    db_tag = Tag(name=tag.name)
+    db.add(db_tag)
+    db.commit()
+    db.refresh(db_tag)
+    logger.info(f"Created {db_tag}")
+    return db_tag
 
 
 def update_tag(db: Session, id: int, tag: TagUpdate) -> TagModel:

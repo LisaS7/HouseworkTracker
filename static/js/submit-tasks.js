@@ -5,6 +5,8 @@ document
     const formData = new FormData(event.target);
     const formObject = {};
 
+    // This is required because formData is not json
+    // and the backend cannot accept a formData object
     formData.forEach((value, key) => {
       if (key === "tags") {
         if (!formObject["tags"]) {
@@ -15,8 +17,6 @@ document
         formObject[key] = value;
       }
     });
-
-    console.log(formObject);
 
     const response = await fetch("/tasks/", {
       method: "POST",
