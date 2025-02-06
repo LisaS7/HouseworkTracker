@@ -1,27 +1,45 @@
-<nav class="navbar navbar-expand-lg bg-body-tertiary px-5 border-top border-bottom border-4 py-0">
-    <div class="container-fluid">
-      <a class="navbar-brand py-3" href="#"><img src="{{ url_for('static', path='icon.svg')}}" alt="cleaning-icon" width=50 height=50/></a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="{{ url_for('home') }}">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/tasks">Tasks</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Tags</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('all_users') }}">Users</a>
-          </li>
-
-
-        </ul>
-
-      </div>
+<nav
+  class="navbar navbar-expand-lg bg-body-tertiary px-5 border-top border-bottom border-4 py-0"
+>
+  <div class="container-fluid">
+    <a class="navbar-brand py-3" href="#"
+      ><img
+        src="{{ url_for('static', path='icon.svg')}}"
+        alt="cleaning-icon"
+        width="50"
+        height="50"
+    /></a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a
+            class="nav-link active"
+            aria-current="page"
+            href="{{ url_for('home') }}"
+            >Home</a
+          >
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('get_tasks') }}">Tasks</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('get_tags') }}">Tags</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('all_users') }}">Users</a>
+        </li>
+      </ul>
     </div>
-  </nav>
+  </div>
+</nav>
