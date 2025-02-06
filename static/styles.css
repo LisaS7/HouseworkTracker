@@ -121,6 +121,20 @@ body {
   border: none;
 }
 
+.btn-small {
+  width: 2.5rem;
+  height: 0.7rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  background-color: var(--pale-blue);
+  color: white;
+  font-size: 2rem;
+  padding: 0.9rem 0.8rem 1.1rem 0.8rem;
+  border: none;
+}
+
 /* ==========================
    Media
    ========================== */
