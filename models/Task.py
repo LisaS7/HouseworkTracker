@@ -48,6 +48,10 @@ class Task(Database.Base):
 
     @validates("repeat_interval")
     def validate_repeat_interval(self, _, value):
+        if value is None:
+            return 0
+
+        # Test if value is int or can be cast
         if not isinstance(value, int):
             try:
                 int_value = int(value)
@@ -58,6 +62,7 @@ class Task(Database.Base):
         else:
             int_value = value
 
+        # If we've got this far then value is an int
         if int_value > 0:
             return int_value
 
@@ -67,6 +72,9 @@ class Task(Database.Base):
 
     @validates("priority")
     def validate_priority(self, _, value):
+        if not value:
+            return PRIORITIES[0]
+
         if value not in PRIORITIES:
             message = f"{value} is not a valid priority"
             logger.error(f"ValueError: {message}")
