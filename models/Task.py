@@ -1,6 +1,7 @@
 import datetime as dt
 from sqlalchemy import Column, Integer, String, Date, ForeignKey, Computed
 from sqlalchemy.orm import relationship, validates
+from sqlalchemy.ext.hybrid import hybrid_property
 
 from models.Tag import task_tags
 from DB.session import Database
@@ -30,6 +31,12 @@ class Task(Database.Base):
         Date,
         Computed(next_due_query, persisted=True),
     )
+
+    @hybrid_property
+    def overdue(self):
+        if self.next_due is None:
+            return False
+        return self.next_due < dt.date.today()
 
     @validates("title")
     def validate_title_length(self, _, value):

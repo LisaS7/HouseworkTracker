@@ -10,7 +10,7 @@
   <div class="task-list">
     {% for task in tag.tasks %}
     <button
-      class="btn m-3"
+      class="btn m-3 {% if task.overdue %}bg-danger text-white{% endif %}"
       onclick="window.location.href='{{ url_for('get_task', task_id=task.id) }}'"
     >
       {{ task.title }}
