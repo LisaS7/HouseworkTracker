@@ -1,6 +1,5 @@
 from fastapi import APIRouter, Request, Depends
 from sqlalchemy.orm import Session
-from typing import List
 
 from config import templates, logger
 from DB.session import get_db
@@ -22,3 +21,6 @@ async def get_tags(request: Request, db: Session = Depends(get_db)):
     return templates.TemplateResponse(
         "/tags/tags.html", context={"request": request, "tags": data}
     )
+
+
+# TODO: edit tags
