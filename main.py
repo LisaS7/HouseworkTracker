@@ -1,5 +1,7 @@
 from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
+from fastapi.exceptions import RequestValidationError
+from fastapi.responses import JSONResponse
 from starlette.exceptions import HTTPException
 
 from DB.session import database
@@ -23,6 +25,15 @@ if not TESTING:
     database.set_engine(testing=TESTING)
 
 
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request, exc: RequestValidationError):
+    return JSONResponse(
+        status_code=422,
+        content={"detail": "Validation failed", "errors": exc.errors()},
+    )
+
+
+# TODO: review this - why does it only work with the starlette exception?
 @app.exception_handler(HTTPException)
 async def custom_404_error(request: Request, exc: HTTPException):
     if exc.status_code == 404:
