@@ -1,0 +1,24 @@
+{% extends "base.html" %} {% block title %}Tags - Housework Tracker{% endblock
+%} {% block content %}
+
+<h1 class="mb-4">Tags</h1>
+
+{% for tag in tags %}
+<div class="tag-container p-3 mb-5">
+  <h2>{{ tag.name }}</h2>
+  {% if tag.tasks %}
+  <div class="task-list">
+    {% for task in tag.tasks %}
+    <button
+      class="btn m-3"
+      onclick="window.location.href='{{ url_for('get_task', task_id=task.id) }}'"
+    >
+      {{ task.title }}
+    </button>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p>No tasks assigned to this tag.</p>
+  {% endif %}
+</div>
+{% endfor %} {% endblock %}
