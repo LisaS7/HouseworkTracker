@@ -13,14 +13,12 @@ document.addEventListener("DOMContentLoaded", function () {
         label: tag.name,
       }));
 
-      new Choices("#tags", {
+      Choices("#tags", {
         removeItemButton: true, // Adds an "X" button to remove tags
         removeItems: true,
         duplicateItemsAllowed: false,
         placeholderValue: "Add a tag",
         addItems: true,
-        addChoices: true,
-        addItemText: true,
         allowHTML: false,
         choices: choices,
       });

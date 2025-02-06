@@ -45,11 +45,18 @@ def get_task_by_id(db: Session, id: int) -> TaskModel:
 
 
 def create_task(db: Session, task: TaskCreate) -> TaskModel:
-    db.add(task)
+    db_task = Task(
+        title=task.title,
+        priority=task.priority,
+        last_completed=task.last_completed,
+        repeat_interval=task.repeat_interval,
+        user_id=task.user_id,
+    )
+    db.add(db_task)
     db.commit()
-    db.refresh(task)
-    logger.info(f"Created {task}")
-    return task
+    db.refresh(db_task)
+    logger.info(f"Created {db_task}")
+    return db_task
 
 
 def update_task(db: Session, id: int, task: TaskUpdate) -> TaskModel:

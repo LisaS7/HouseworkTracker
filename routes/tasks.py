@@ -7,10 +7,12 @@ from services.Task import (
     get_all_tasks,
     get_task_by_id,
     update_task,
+    create_task,
     TaskNotFoundException,
 )
 from services.User import get_all_users
-from services.schemas import PriorityUpdate, TaskUpdate
+from services.Tag import get_tag_by_name
+from services.schemas import PriorityUpdate, TaskUpdate, TaskCreate
 
 
 router = APIRouter()
@@ -27,18 +29,25 @@ async def get_tasks(request: Request, db: Session = Depends(get_db)):
 
 
 @router.post("/")
-async def create_task():
-    # get request body
+async def create_new_task(task: TaskCreate, db: Session = Depends(get_db)):
 
-    # add any tags that don't already exist
+    tags = []
+    for tag in task.tags:
+        existing_tag = get_tag_by_name(db, tag.name)
 
-    # validate with pydantic
+        if existing_tag:
+            tags.append(existing_tag)
+        else:
+            logger.warning(f"Invalid tag: {tag}")
+
+    task.tags = tags
+
+    print(task)
 
     # call services function
+    # create_task(db, task)
 
-    # redirect to /tasks
-
-    pass
+    return RedirectResponse(url="/tasks", status_code=201)
 
 
 @router.get("/create")
