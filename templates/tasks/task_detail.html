@@ -31,7 +31,7 @@
         Complete
       </button>
       <a
-        href="{{ url_for('edit_task', task_id=task.id) }}"
+        href="{{ url_for('edit_task_form', task_id=task.id) }}"
         class="btn btn-primary"
         >Edit Task</a
       >
@@ -47,6 +47,6 @@
   >
 </div>
 {% endblock %} {% block scripts %}
-<script src="{{ url_for('static', path='js/complete_task.js') }}"></script>
+<script src="{{ url_for('static', path='js/complete-task.js') }}"></script>
 <script src="{{ url_for('static', path='js/delete.js') }}"></script>
 {% endblock %}

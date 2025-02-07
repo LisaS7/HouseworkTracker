@@ -11,6 +11,7 @@ endblock %} {% block content %}
         name="title"
         class="form-control"
         maxlength="255"
+        value="{{task.title if task else ''}}"
         required
       />
     </div>
@@ -20,7 +21,7 @@ endblock %} {% block content %}
       <label for="priority" class="form-label">Priority</label>
       <select id="priority" name="priority" class="form-control">
         {% for priority in priorities %}
-        <option value="{{priority}}">{{priority|title}}</option>
+        <option value="{{priority}}" {% if task and priority == task.priority %}selected{% endif %}>{{priority|title}}</option>
         {% endfor %}
       </select>
     </div>
@@ -33,6 +34,7 @@ endblock %} {% block content %}
         id="last_completed"
         name="last_completed"
         class="form-control"
+        value="{{task.last_completed if task else ''}}"
       />
     </div>
 
@@ -47,7 +49,7 @@ endblock %} {% block content %}
         name="repeat_interval"
         class="form-control"
         min="0"
-        value="0"
+        value="{{task.repeat_interval if task else '0'}}"
       />
     </div>
 
@@ -56,7 +58,7 @@ endblock %} {% block content %}
       <label for="user_id" class="form-label">Assign to User</label>
       <select id="user" name="user_id" class="form-control">
         {% for user in users %}
-        <option value="{{user.id}}">{{user.name}}</option>
+        <option value="{{user.id}}" {% if task and user.id == task.user_id %}selected{% endif %}>{{user.name}}</option>
         {% endfor %}
       </select>
     </div>
@@ -66,10 +68,11 @@ endblock %} {% block content %}
       <label for="tags" class="form-label">Tags</label>
       <select multiple id="tags" name="tags" class="form-control">
         {% for tag in tags %}
-        <option value="{{tag.name}}">{{tag.name}}</option>
+        <option value="{{tag.name}}" {% if tag.name in tag_names %}selected{% endif %}>{{tag.name}}</option>
         {% endfor %}
       </select>
     </div>
+
 
     <!-- Submit Button -->
     <div class="d-flex justify-content-between align-items-center">

@@ -18,8 +18,14 @@ document
       }
     });
 
-    const response = await fetch("/tasks/", {
-      method: "POST",
+    const isEditPage = window.location.pathname.includes("/edit");
+    const method = isEditPage ? "PUT" : "POST";
+    const url = isEditPage
+      ? window.location.pathname.replace("/edit", "")
+      : "/tasks/";
+
+    const response = await fetch(url, {
+      method: method,
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formObject),
     });
