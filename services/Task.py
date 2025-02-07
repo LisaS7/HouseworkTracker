@@ -59,6 +59,7 @@ def create_task(db: Session, task: TaskCreate) -> TaskModel:
         last_completed=task.last_completed,
         repeat_interval=task.repeat_interval,
         user_id=task.user_id,
+        tags=task.tags,
     )
     db.add(db_task)
     db.commit()
