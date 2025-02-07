@@ -25,8 +25,8 @@ document
     });
 
     if (response.ok) {
-      alert("Task added!");
-      window.location.href = "/tasks";
+      const location = response.headers.get("location");
+      window.location.href = location;
     } else {
       // HANDLE ERRORS
       const errorData = await response.json();
