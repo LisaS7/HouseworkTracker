@@ -7,6 +7,8 @@ from dotenv import load_dotenv
 
 from pathlib import Path
 
+today = date.today()
+
 # ----- ENV VARIABLES ------
 env_path = Path(".") / ".env"
 load_dotenv(dotenv_path=env_path)
@@ -61,7 +63,6 @@ LOG_LEVEL = logging.INFO
 LOG_DIR = "logs"
 ECHO_LOGS = False
 
-today = date.today()
 os.makedirs(LOG_DIR, exist_ok=True)
 
 logger = logging.getLogger(__name__)

@@ -115,6 +115,10 @@ body {
   background-color: var(--bold-blue);
 }
 
+.btn-secondary {
+  background-color: var(--pale-blue);
+}
+
 .badge.bg-success {
   background-color: var(--turquoise) !important;
 }
