@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Request, Depends, HTTPException
 from fastapi.responses import RedirectResponse
 from sqlalchemy.orm import Session
-from config import templates, logger, PRIORITIES
+from config import templates, logger, PRIORITIES, today
 from DB.session import get_db
 from services.Task import (
     get_all_tasks,
@@ -81,6 +81,14 @@ def update_task_priority(
     update_task(db, task_id, TaskUpdate(**data.model_dump()))
 
     return {"message": "Priority update successful"}
+
+
+@router.patch("/{task_id}/complete")
+def complete_task(task_id: int, db: Session = Depends(get_db)):
+    data = TaskUpdate(last_completed=today)
+    update_task(db, task_id, data)
+
+    return {"message": "Task marked complete"}
 
 
 @router.put("/{task_id}")

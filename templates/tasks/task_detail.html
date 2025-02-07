@@ -22,15 +22,20 @@
     {% endif %}
   </div>
 
-  <div class="mt-3">
-    <a href="{{ url_for('get_tasks') }}" class="btn btn-secondary"
-      >Back to Tasks</a
-    >
-    <a
-      href="{{ url_for('edit_task', task_id=task.id) }}"
-      class="btn btn-primary"
-      >Edit Task</a
-    >
+  <div class="d-flex mt-3 justify-content-between">
+    <div>
+      <button
+        class="btn btn-sm btn-secondary"
+        onclick="complete_task({{ task.id }})"
+      >
+        Complete
+      </button>
+      <a
+        href="{{ url_for('edit_task', task_id=task.id) }}"
+        class="btn btn-primary"
+        >Edit Task</a
+      >
+    </div>
     <a
       href="{{ url_for('delete_task', task_id=task.id) }}"
       class="btn btn-danger"
@@ -38,4 +43,11 @@
     >
   </div>
 </div>
+<div class="mt-5">
+  <a href="{{ url_for('get_tasks') }}" class="btn btn-secondary"
+    >Back to Tasks</a
+  >
+</div>
+{% endblock %} {% block scripts %}
+<script src="{{ url_for('static', path='js/complete_task.js') }}"></script>
 {% endblock %}
