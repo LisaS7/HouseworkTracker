@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 
 from models.Task import Task
 from services.schemas import TaskCreate, TaskUpdate, TaskModel, TagModel
+from services.Tag import get_tag_by_name
 from config import logger
 
 TODAY = date.today()
@@ -72,8 +73,25 @@ def update_task(db: Session, id: int, task: TaskUpdate) -> TaskModel:
     existing_task = get_task_by_id(db, id)
     logger.info(f"Updating old Task: {existing_task}")
 
-    for key, value in task.model_dump(exclude_unset=True).items():
-        setattr(existing_task, key, value)
+    task_data = task.model_dump(exclude_unset=True)
+
+    # Loop over each field in the data and set it on the task object
+    for key, value in task_data.items():
+        # If tags then we need to check whether they exist already
+        if key == "tags":
+            tags = []
+            for tag in value:
+                existing_tag = get_tag_by_name(db, tag["name"])
+
+            if existing_tag:
+                tags.append(existing_tag)
+            else:
+                logger.warning(f"Invalid tag: {tag}")
+
+            # set the tags to our new list
+            existing_task.tags = tags
+        else:
+            setattr(existing_task, key, value)
 
     db.commit()
     db.refresh(existing_task)
