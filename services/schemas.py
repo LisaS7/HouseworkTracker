@@ -83,7 +83,7 @@ class TaskUpdate(BaseModel):
     last_completed: date | None = None
     repeat_interval: int | None = None
     user_id: int | None = None
-    tags: List[TagModel] | None = None
+    tags: List[TagCreate] | None = None
 
 
 class PriorityUpdate(BaseModel):
