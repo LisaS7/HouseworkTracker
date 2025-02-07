@@ -96,4 +96,4 @@ class Task(Database.Base):
             return value
 
     def __str__(self):
-        return f"<Task id={self.id} title={self.title} priority={self.priority} last_completed={self.last_completed} repeat_interval={self.repeat_interval} user_id={self.user_id} tag_count={len(self.tags)}>"
+        return f"<Task id={self.id} title={self.title} priority={self.priority} last_completed={self.last_completed} repeat_interval={self.repeat_interval} user_id={self.user_id} tags={[tag.name for tag in self.tags]}>"
