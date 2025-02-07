@@ -8,6 +8,7 @@ from services.Task import (
     get_task_by_id,
     update_task,
     create_task,
+    delete_task,
     TaskNotFoundException,
 )
 from services.User import get_all_users
@@ -44,9 +45,10 @@ async def create_new_task(task: TaskCreate, db: Session = Depends(get_db)):
 
     print(task)
 
-    create_task(db, task)
+    # we need to grab the db task to get the id field
+    new_task = create_task(db, task)
 
-    return RedirectResponse(url=f"/tasks/{task.id}", status_code=201)
+    return RedirectResponse(url=f"/tasks/{new_task.id}", status_code=201)
 
 
 @router.get("/create")
@@ -108,9 +110,7 @@ async def edit_task(task_id: int, request: Request, db: Session = Depends(get_db
 
 
 @router.delete("/{task_id}")
-async def delete_task(task_id: int, request: Request, db: Session = Depends(get_db)):
-    task = get_task_by_id(db, task_id)
-
+async def task_delete(task_id: int, request: Request, db: Session = Depends(get_db)):
     logger.info(f"{request.method} {request.url}")
-    logger.info(f"Task to delete: {task}")
+    delete_task(db, task_id)
     return RedirectResponse(url="/tasks", status_code=204)
