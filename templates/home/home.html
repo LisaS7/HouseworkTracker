@@ -13,8 +13,32 @@
       </button>
       {% endfor %}
     </div>
-    <div class="col-6 p-4"><h2>Upcoming</h2></div>
+    <div class="col-6 p-4">
+      <h2>Today's Tasks</h2>
+      {% for task in today %}
+      <button
+        class="btn m-3 btn-primary"
+        onclick="window.location.href='{{ url_for('get_task', task_id=task.id) }}'"
+      >
+        {{ task.title }}
+      </button>
+      {% endfor %}
+    </div>
   </div>
-</div>
+  <div class="row light-container border-bottom border-right border-left">
+    <div class="col-6 p-4">
+      <h2>Next 7 Days</h2>
+      {% for task in week %}
+      <button
+        class="btn m-3 btn-primary"
+        onclick="window.location.href='{{ url_for('get_task', task_id=task.id) }}'"
+      >
+        {{ task.title }}
+      </button>
+      {% endfor %}
+    </div>
+  </div>
+  </div>
 
-{% endblock %}
+  {% endblock %}
+</div>

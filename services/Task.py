@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, timedelta
 from typing import List
 from sqlalchemy.orm import Session
 
@@ -21,16 +21,24 @@ def get_all_tasks(db: Session) -> List[TaskModel]:
     return db.query(Task).all()
 
 
-def get_all_incomplete_tasks(db: Session) -> List[TaskModel]:
-    return db.query(Task).filter(Task.complete == False).all()
-
-
 def get_all_overdue_tasks(db: Session) -> List[TaskModel]:
     return db.query(Task).filter(Task.next_due < TODAY).all()
 
 
 def get_todays_tasks(db: Session) -> List[TaskModel]:
     return db.query(Task).filter(Task.next_due == TODAY).all()
+
+
+def get_week_tasks(db: Session) -> List[TaskModel]:
+    next_week = TODAY + timedelta(days=7)
+    return (
+        db.query(Task)
+        .filter(
+            Task.next_due > TODAY,  # Exclude today
+            Task.next_due <= next_week,  # Include up to 7 days ahead
+        )
+        .all()
+    )
 
 
 def get_tasks_by_user(db: Session, id: int) -> List[TaskModel]:
