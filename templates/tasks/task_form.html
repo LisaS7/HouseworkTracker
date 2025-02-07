@@ -63,8 +63,12 @@ endblock %} {% block content %}
 
     <!-- Tags -->
     <div class="mb-3">
-      <label for="tags">Tags</label>
-      <select id="tags" name="tags" class="form-control" multiple></select>
+      <label for="tags" class="form-label">Tags</label>
+      <select multiple id="tags" name="tags" class="form-control">
+        {% for tag in tags %}
+        <option value="{{tag.id}}">{{tag.name}}</option>
+        {% endfor %}
+      </select>
     </div>
 
     <!-- Submit Button -->
@@ -75,11 +79,5 @@ endblock %} {% block content %}
   </form>
 </div>
 {% endblock %} {% block scripts %}
-<link
-  rel="stylesheet"
-  href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css"
-/>
-<script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
-<script src="{{ url_for('static', path='js/choices.js') }}"></script>
 <script src="{{ url_for('static', path='js/submit-tasks.js') }}"></script>
 {% endblock %}
