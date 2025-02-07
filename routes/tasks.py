@@ -11,7 +11,7 @@ from services.Task import (
     TaskNotFoundException,
 )
 from services.User import get_all_users
-from services.Tag import get_tag_by_name
+from services.Tag import get_tag_by_name, get_all_tags
 from services.schemas import PriorityUpdate, TaskUpdate, TaskCreate
 
 
@@ -44,19 +44,24 @@ async def create_new_task(task: TaskCreate, db: Session = Depends(get_db)):
 
     print(task)
 
-    # call services function
-    # create_task(db, task)
+    create_task(db, task)
 
-    return RedirectResponse(url="/tasks", status_code=201)
+    return RedirectResponse(url=f"/tasks/{task.id}", status_code=201)
 
 
 @router.get("/create")
 async def create_task_form(request: Request, db: Session = Depends(get_db)):
     users = get_all_users(db)
+    tags = get_all_tags(db)
     logger.info(f"{request.method} {request.url}")
     return templates.TemplateResponse(
         "/tasks/task_form.html",
-        context={"request": request, "priorities": PRIORITIES, "users": users},
+        context={
+            "request": request,
+            "priorities": PRIORITIES,
+            "users": users,
+            "tags": tags,
+        },
     )
 
 
