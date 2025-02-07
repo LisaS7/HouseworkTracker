@@ -43,8 +43,6 @@ async def create_new_task(task: TaskCreate, db: Session = Depends(get_db)):
 
     task.tags = tags
 
-    print(task)
-
     # we need to grab the db task to get the id field
     new_task = create_task(db, task)
 
