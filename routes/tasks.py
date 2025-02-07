@@ -29,6 +29,20 @@ async def get_tasks(request: Request, db: Session = Depends(get_db)):
     )
 
 
+@router.get("/{task_id}")
+async def get_task(task_id: int, request: Request, db: Session = Depends(get_db)):
+    try:
+        task = get_task_by_id(db, task_id)
+    except TaskNotFoundException as e:
+        raise HTTPException(status_code=404, detail=str(e))
+
+    logger.info(f"{request.method} {request.url}")
+    logger.info(f"Returned {task}")
+    return templates.TemplateResponse(
+        "/tasks/task_detail.html", context={"request": request, "task": task}
+    )
+
+
 @router.post("/")
 async def create_new_task(task: TaskCreate, db: Session = Depends(get_db)):
 
@@ -49,36 +63,6 @@ async def create_new_task(task: TaskCreate, db: Session = Depends(get_db)):
     return RedirectResponse(url=f"/tasks/{new_task.id}", status_code=201)
 
 
-@router.get("/create")
-async def create_task_form(request: Request, db: Session = Depends(get_db)):
-    users = get_all_users(db)
-    tags = get_all_tags(db)
-    logger.info(f"{request.method} {request.url}")
-    return templates.TemplateResponse(
-        "/tasks/task_form.html",
-        context={
-            "request": request,
-            "priorities": PRIORITIES,
-            "users": users,
-            "tags": tags,
-        },
-    )
-
-
-@router.get("/{task_id}")
-async def get_task(task_id: int, request: Request, db: Session = Depends(get_db)):
-    try:
-        task = get_task_by_id(db, task_id)
-    except TaskNotFoundException as e:
-        raise HTTPException(status_code=404, detail=str(e))
-
-    logger.info(f"{request.method} {request.url}")
-    logger.info(f"Returned {task}")
-    return templates.TemplateResponse(
-        "/tasks/task_detail.html", context={"request": request, "task": task}
-    )
-
-
 @router.patch("/{task_id}/priority")
 def update_task_priority(
     task_id: int, data: PriorityUpdate, db: Session = Depends(get_db)
@@ -97,14 +81,14 @@ def complete_task(task_id: int, db: Session = Depends(get_db)):
 
 
 @router.put("/{task_id}")
-async def edit_task(task_id: int, request: Request, db: Session = Depends(get_db)):
-    task = get_task_by_id(db, task_id)
+async def edit_task(
+    task_id: int, task: TaskUpdate, request: Request, db: Session = Depends(get_db)
+):
 
+    new_task = update_task(db, task_id, task)
     logger.info(f"{request.method} {request.url}")
-    logger.info(f"Returned {task}")
-    return templates.TemplateResponse(
-        "/tasks/task_detail.html", context={"request": request, "task": task}
-    )
+    logger.info(f"Returned {new_task}")
+    return RedirectResponse(url=f"/tasks/{new_task.id}", status_code=200)
 
 
 @router.delete("/{task_id}")
@@ -112,3 +96,43 @@ async def task_delete(task_id: int, request: Request, db: Session = Depends(get_
     logger.info(f"{request.method} {request.url}")
     delete_task(db, task_id)
     return RedirectResponse(url="/tasks", status_code=204)
+
+
+# --------------- FORMS -----------------------
+
+
+@router.get("/create")
+async def create_task_form(request: Request, db: Session = Depends(get_db)):
+    users = get_all_users(db)
+    tags = get_all_tags(db)
+    logger.info(f"{request.method} {request.url}")
+    return templates.TemplateResponse(
+        "/tasks/task_form.html",
+        context={
+            "request": request,
+            "priorities": PRIORITIES,
+            "users": users,
+            "tags": tags,
+        },
+    )
+
+
+@router.get("/{task_id}/edit")
+async def edit_task_form(task_id: int, request: Request, db: Session = Depends(get_db)):
+    task = get_task_by_id(db, task_id)
+    tag_names = [tag.name for tag in task.tags]
+    users = get_all_users(db)
+    tags = get_all_tags(db)
+
+    logger.info(f"{request.method} {request.url}")
+    return templates.TemplateResponse(
+        "/tasks/task_form.html",
+        context={
+            "request": request,
+            "task": task,
+            "tag_names": tag_names,
+            "priorities": PRIORITIES,
+            "users": users,
+            "tags": tags,
+        },
+    )
