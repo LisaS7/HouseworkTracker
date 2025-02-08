@@ -45,34 +45,3 @@ async function edit_task(id) {
     }
   });
 }
-
-//   function updateTag() {
-//     const newName = tagInput.value.trim();
-//     if (!newName || newName === "{{ tag.name }}") {
-//       tagName.classList.remove("d-none");
-//       tagInput.classList.add("d-none");
-//       return;
-//     }
-
-//     fetch(`/tags/${tagId}`, {
-//       method: "PUT",
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//       body: JSON.stringify({ name: newName }),
-//     })
-//       .then((response) => {
-//         if (!response.ok) throw new Error("Failed to update tag");
-//         return response.json();
-//       })
-//       .then((data) => {
-//         tagName.textContent = data.name;
-//         tagName.classList.remove("d-none");
-//         tagInput.classList.add("d-none");
-//       })
-//       .catch((error) => {
-//         console.error("Error updating tag:", error);
-//         alert("Failed to update tag. Try again.");
-//       });
-//   }
-// });
