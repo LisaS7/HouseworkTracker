@@ -23,11 +23,55 @@
 {% for tag in tags %}
 <div class="light-container p-3 mb-5">
   <div class="d-flex justify-content-between align-items-center">
-    <h2>{{ tag.name }}</h2>
+    <div class="d-flex align-items-center gap-2">
+      <h2 id="heading-{{tag.id}}">{{ tag.name }}</h2>
+      <input
+        type="text"
+        id="tag-input-{{tag.id}}"
+        class="form-control d-none"
+        value="{{tag.name}}"
+      />
+      <button id="edit-{{tag.id}}" onclick="show_input({{tag.id}})">
+        <img
+          class="pb-1"
+          src="{{ url_for('static', path='edit.svg')}}"
+          alt="edit-icon"
+          width="30"
+          height="30"
+        />
+      </button>
+      <button
+        id="tick-{{tag.id}}"
+        class="d-none"
+        onclick="edit_task({{tag.id}})"
+      >
+        <img
+          class="pb-1"
+          src="{{ url_for('static', path='tick.svg')}}"
+          alt="tick-icon"
+          width="30"
+          height="30"
+        />
+      </button>
+      <button
+        id="cancel-{{tag.id}}"
+        class="d-none"
+        onclick="cancel_input({{tag.id}})"
+      >
+        <img
+          class="pb-1"
+          src="{{ url_for('static', path='cross.svg')}}"
+          alt="cancel-icon"
+          width="30"
+          height="30"
+        />
+      </button>
+    </div>
     {% if not tag.tasks %}
     <button class="btn btn-danger" onclick="delete_item('tags',{{ tag.id }})">
       Delete
     </button>
+
     {% endif %}
   </div>
   {% if tag.tasks %}
@@ -47,5 +91,6 @@
 </div>
 {% endfor %} {% endblock %} {% block scripts %}
 <script src="{{ url_for('static', path='js/submit-tags.js') }}"></script>
+<script src="{{ url_for('static', path='js/edit-tag.js') }}"></script>
 <script src="{{ url_for('static', path='js/delete.js') }}"></script>
 {% endblock %}

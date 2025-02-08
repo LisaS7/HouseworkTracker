@@ -5,8 +5,14 @@ from sqlalchemy.orm import Session
 from config import templates, logger
 from DB.session import get_db
 
-from services.Tag import get_all_tags, get_tag_by_name, create_tag, delete_tag
-from services.schemas import TagCreate
+from services.Tag import (
+    get_all_tags,
+    get_tag_by_name,
+    create_tag,
+    delete_tag,
+    update_tag,
+)
+from services.schemas import TagCreate, TagUpdate
 
 router = APIRouter()
 
@@ -47,3 +53,16 @@ async def tag_delete(tag_id: int, db: Session = Depends(get_db)):
 
 
 # TODO: edit tags
+@router.put("/{tag_id}")
+async def edit_tag_name(
+    request: Request, tag_id: int, tag: TagUpdate, db: Session = Depends(get_db)
+):
+    logger.info(f"{request.method} {request.url}")
+    existing = get_tag_by_name(db, tag.name)
+
+    # check if we already have a tag by that name
+    if existing:
+        logger.warning(f"Tag already exists: {tag}")
+        return JSONResponse(status_code=409, content="Tag already exists")
+    else:
+        update_tag(db, tag_id, tag)
