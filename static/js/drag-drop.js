@@ -13,6 +13,7 @@ function drop(ev) {
   ev.preventDefault();
   var taskId = ev.dataTransfer.getData("taskId");
   var newPriority = ev.target.id;
+  console.log(newPriority);
 
   // Ensure the drop target is valid (e.g., not a nested div)
   if (!["LOW", "MEDIUM", "HIGH"].includes(newPriority)) {
@@ -21,7 +22,7 @@ function drop(ev) {
 
   // Send an API request to update the task priority in the database
   fetch(`/tasks/${taskId}/priority`, {
-    method: "POST",
+    method: "PATCH",
     headers: {
       "Content-Type": "application/json",
     },
