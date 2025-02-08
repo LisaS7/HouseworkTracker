@@ -12,7 +12,7 @@ async function delete_item(endpoint, id) {
 
   if (response.ok) {
     alert("Deleted!");
-    window.location.href = `/${endpoint}`;
+    window.history.go(-1);
   } else {
     const errorData = await response.json();
     alert(errorData);
