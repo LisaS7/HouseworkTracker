@@ -9,7 +9,7 @@
         class="btn m-3 btn-primary"
         onclick="window.location.href='{{ url_for('get_task', task_id=task.id) }}'"
       >
-        {{ task.title }}
+        <p class="mb-0">{{ task.title }}</p> <small class="text-muted">({{task.tags[0].name}})</small>
       </button>
       {% endfor %}
     </div>
@@ -20,7 +20,7 @@
         class="btn m-3 btn-primary"
         onclick="window.location.href='{{ url_for('get_task', task_id=task.id) }}'"
       >
-        {{ task.title }}
+      <p class="mb-0">{{ task.title }}</p> <small class="text-muted">({{task.tags[0].name}})</small>
       </button>
       {% endfor %}
     </div>
@@ -33,7 +33,7 @@
         class="btn m-3 btn-primary"
         onclick="window.location.href='{{ url_for('get_task', task_id=task.id) }}'"
       >
-        {{ task.title }}
+      <p class="mb-0">{{ task.title }}</p> <small class="text-muted">({{task.tags[0].name}})</small>
       </button>
       {% endfor %}
     </div>
