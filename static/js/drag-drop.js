@@ -1,6 +1,13 @@
+// Removed until I figure out how to get it working.
+// The problem is that the bootstrap navbar stops working on this page
+// when I include this script. Probably to do with the ev.preventdefault
+// but I haven't found a way to fix it yet
+
 // Allow the drop
 function allowDrop(ev) {
-  ev.preventDefault();
+  if (["LOW", "MEDIUM", "HIGH"].includes(ev.target.id)) {
+    ev.preventDefault();
+  }
 }
 
 // Start dragging a task
@@ -10,10 +17,12 @@ function drag(ev) {
 
 // Handle the drop event
 function drop(ev) {
-  ev.preventDefault();
+  if (["LOW", "MEDIUM", "HIGH"].includes(ev.target.id)) {
+    ev.preventDefault();
+  }
+
   var taskId = ev.dataTransfer.getData("taskId");
   var newPriority = ev.target.id;
-  console.log(newPriority);
 
   // Ensure the drop target is valid (e.g., not a nested div)
   if (!["LOW", "MEDIUM", "HIGH"].includes(newPriority)) {
