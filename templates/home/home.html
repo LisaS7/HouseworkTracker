@@ -1,43 +1,45 @@
 {% extends "base.html" %} {% block title %}Home - Housework Tracker{% endblock
 %} {% block content %}
-<div class="p-4">
-  <div class="row border light-container">
-    <div class="col-5 p-4 border-right">
-      <h2>Overdue Tasks</h2>
-      {% for task in overdue %}
-      <button
-        class="btn m-3 btn-primary"
-        onclick="window.location.href='{{ url_for('get_task', task_id=task.id) }}'"
-      >
-        <p class="mb-0">{{ task.title }}</p> <small class="text-muted">({{task.tags[0].name}})</small>
-      </button>
-      {% endfor %}
-    </div>
-    <div class="col-6 p-4">
-      <h2>Today's Tasks</h2>
-      {% for task in today %}
-      <button
-        class="btn m-3 btn-primary"
-        onclick="window.location.href='{{ url_for('get_task', task_id=task.id) }}'"
-      >
-      <p class="mb-0">{{ task.title }}</p> <small class="text-muted">({{task.tags[0].name}})</small>
-      </button>
-      {% endfor %}
-    </div>
+
+<div class="">
+  <div class="light-container border p-3">
+    <h2>Overdue Tasks</h2>
+    {% for task in overdue %}
+    <button
+      class="btn m-3 btn-primary"
+      onclick="window.location.href='{{ url_for('get_task', task_id=task.id) }}'"
+    >
+      <p class="mb-0">{{ task.title }}</p>
+      <small class="text-muted">({{task.tags[0].name}})</small>
+    </button>
+    {% endfor %}
   </div>
-  <div class="row light-container border-bottom border-right border-left">
-    <div class="col-6 p-4">
-      <h2>Next 7 Days</h2>
-      {% for task in week %}
-      <button
-        class="btn m-3 btn-primary"
-        onclick="window.location.href='{{ url_for('get_task', task_id=task.id) }}'"
-      >
-      <p class="mb-0">{{ task.title }}</p> <small class="text-muted">({{task.tags[0].name}})</small>
-      </button>
-      {% endfor %}
-    </div>
+
+  <div class="light-container border-left border-right p-3">
+    <h2>Today's Tasks</h2>
+    {% for task in today %}
+    <button
+      class="btn m-3 btn-primary"
+      onclick="window.location.href='{{ url_for('get_task', task_id=task.id) }}'"
+    >
+      <p class="mb-0">{{ task.title }}</p>
+      <small class="text-muted">({{task.tags[0].name}})</small>
+    </button>
+    {% endfor %} {% if not today %}
+    <p>No tasks today!</p>
+    {% endif %}
   </div>
+  <div class="light-container border p-3">
+    <h2>Next 7 Days</h2>
+    {% for task in week %}
+    <button
+      class="btn m-3 btn-primary"
+      onclick="window.location.href='{{ url_for('get_task', task_id=task.id) }}'"
+    >
+      <p class="mb-0">{{ task.title }}</p>
+      <small class="text-muted">({{task.tags[0].name}})</small>
+    </button>
+    {% endfor %}
   </div>
 
   {% endblock %}
